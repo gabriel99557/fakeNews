@@ -1,0 +1,114 @@
+// ============================================================
+// TOKENS — identidade visual do Crivo
+//
+// Conceito: "carimbo de verificação". O produto autentica conteúdo,
+// então a linguagem visual remete a selos, protocolos e dossiês —
+// não ao clichê genérico de "produto de IA".
+// ============================================================
+:root {
+  // Cor
+  --color-ink: #14171f; // fundo — grafite-marinho, não preto puro
+  --color-ink-soft: #1c2029; // superfícies elevadas sobre o fundo
+  --color-ink-line: #2a2f3b; // divisores/bordas sutis
+  --color-paper: #eceff3; // texto principal — branco-gelo frio
+  --color-paper-dim: #9aa2b3; // texto secundário
+  --color-signal: #f2a33d; // âmbar — ação, foco, "em análise"
+  --color-signal-soft: rgba(242, 163, 61, 0.14);
+  --color-true: #3fa66e;
+  --color-true-soft: rgba(63, 166, 110, 0.14);
+  --color-false: #d8544b;
+  --color-false-soft: rgba(216, 84, 75, 0.14);
+  --color-unclear: #8a8fa3;
+  --color-unclear-soft: rgba(138, 143, 163, 0.16);
+
+  // Tipografia
+  --font-display: 'Fraunces', ui-serif, serif;
+  --font-body: 'IBM Plex Sans', ui-sans-serif, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #app {
+  min-height: 100%;
+  background: var(--color-ink);
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+// Textura de fundo sutil: pontilhado fino, como papel de segurança
+.bg-crivo {
+  background-color: var(--color-ink);
+  background-image: radial-gradient(var(--color-ink-line) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-signal);
+}
+
+.divider-line {
+  height: 1px;
+  background: var(--color-ink-line);
+  border: none;
+}
+
+// ============================================================
+// Selo de veredito — elemento de assinatura da interface
+// ============================================================
+.verdict-stamp {
+  animation: stamp-press 480ms cubic-bezier(0.2, 0.8, 0.3, 1.1) both;
+}
+
+@keyframes stamp-press {
+  0% {
+    opacity: 0;
+    transform: scale(1.7) rotate(-14deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(0.94) rotate(3deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(-6deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .verdict-stamp {
+    animation: none;
+    transform: rotate(-6deg);
+  }
+}
+
+// Scrollbar discreta (webkit)
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-ink);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-ink-line);
+  border-radius: 6px;
+}

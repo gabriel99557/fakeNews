@@ -1,0 +1,16 @@
+# Regras gerais do monorepo (cada subprojeto tem o seu próprio .gitignore)
+
+# Segredos e variáveis de ambiente
+.env
+.env.*
+!.env.example
+
+# IDEs e sistema operacional
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
