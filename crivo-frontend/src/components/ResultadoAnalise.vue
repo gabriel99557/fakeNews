@@ -28,6 +28,10 @@
           <span>{{ dataFormatada }}</span>
           <span>·</span>
           <span>{{ resultado.origem === 'url' ? 'origem: URL' : 'origem: texto colado' }}</span>
+          <template v-if="resultado.modelo">
+            <span>·</span>
+            <span>{{ resultado.modelo === 'local' ? 'modelo: Llama 3 local' : 'modelo: nuvem (Groq)' }}</span>
+          </template>
         </div>
       </div>
     </div>

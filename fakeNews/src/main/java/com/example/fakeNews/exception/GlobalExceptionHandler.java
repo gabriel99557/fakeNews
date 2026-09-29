@@ -7,6 +7,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.LocalDateTime;
 
@@ -45,6 +46,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ErroProcessamentoIAException.class)
     public ResponseEntity<ErroResponse> handleErroIA(ErroProcessamentoIAException ex) {
         return construir(HttpStatus.BAD_GATEWAY, ex.getMessage());
+    }
+
+    @ExceptionHandler(RecursoNaoEncontradoException.class)
+    public ResponseEntity<ErroResponse> handleNaoEncontrado(RecursoNaoEncontradoException ex) {
+        return construir(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErroResponse> handleTipoParametro(MethodArgumentTypeMismatchException ex) {
+        return construir(HttpStatus.BAD_REQUEST, "Parâmetro inválido: " + ex.getName());
     }
 
     @ExceptionHandler(Exception.class)

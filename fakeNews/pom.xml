@@ -70,15 +70,7 @@
 			<version>1.18.1</version>
 		</dependency>
 
-		<!--
-		DEPENDÊNCIAS DE BANCO DE DADOS (PostgreSQL/JPA) — ainda não ativas.
-		Descomente quando for implementar a Camada de Persistência (RF03).
-		Depois de descomentar, também é preciso descomentar:
-		  - entity/AnaliseEntity.java
-		  - repository/AnaliseRepository.java
-		  - o bloco de persistência em service/HistoricoService.java
-		e configurar spring.datasource.* no application.properties.
-
+		<!-- Camada de Persistência (RF03): Spring Data JPA + PostgreSQL -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -88,7 +80,13 @@
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		-->
+
+		<!-- Banco em memória para o perfil "h2" (desenvolvimento sem PostgreSQL) e para os testes -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

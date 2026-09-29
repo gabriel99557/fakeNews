@@ -2,18 +2,7 @@
   <q-page class="bg-crivo">
     <div class="page-shell">
 
-      <!-- Cabeçalho -->
-      <header class="row items-center justify-between q-py-md">
-        <div class="row items-center" style="gap: 10px">
-          <q-icon name="fact_check" color="orange-6" size="22px" />
-          <span class="font-display text-weight-600" style="font-size: 1.15rem; color: var(--color-paper)">
-            CrivoNews
-          </span>
-        </div>
-        <span class="font-mono text-caption" style="color: var(--color-paper-dim)">
-          UFN · TFG · verificação com IA
-        </span>
-      </header>
+      <app-header />
 
       <hr class="divider-line q-mb-xl" />
 
@@ -78,6 +67,7 @@
 <script setup>
 import { ref } from 'vue'
 import { Notify } from 'quasar'
+import AppHeader from '../components/AppHeader.vue'
 import AnaliseForm from '../components/AnaliseForm.vue'
 import ResultadoAnalise from '../components/ResultadoAnalise.vue'
 import { analisarConteudo, extrairMensagemErro } from '../services/api.js'
@@ -110,34 +100,6 @@ async function executarAnalise({ conteudo, modelo }) {
 </script>
 
 <style scoped>
-.page-shell {
-  max-width: 980px;
-  margin: 0 auto;
-  padding-top: 12px;
-  padding-bottom: 40px;
-  padding-left: 24px;
-  padding-right: 24px;
-}
-
-@media (min-width: 1440px) {
-  .page-shell {
-    max-width: 1120px;
-  }
-}
-
-.hero-title {
-  font-size: 2.6rem;
-  line-height: 1.08;
-  color: var(--color-paper);
-  font-weight: 600;
-}
-
-@media (max-width: 599px) {
-  .hero-title {
-    font-size: 2rem;
-  }
-}
-
 .console-panel {
   background: var(--color-ink-soft);
   border: 1px solid var(--color-ink-line);
