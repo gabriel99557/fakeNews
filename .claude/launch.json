@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "crivo-frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "crivo-frontend", "run", "dev"],
+      "port": 9000
+    }
+  ]
+}
