@@ -1,7 +1,7 @@
 <template>
   <div class="resultado-card q-pa-lg">
     <div class="row items-start" style="gap: 28px">
-      <div class="col-auto">
+      <div class="col-12 col-sm-auto row justify-center">
         <verdict-stamp
           :veredito="resultado.veredito"
           :probabilidade-fake="resultado.probabilidadeFake"
@@ -9,7 +9,7 @@
         />
       </div>
 
-      <div class="col" style="min-width: 0">
+      <div class="col-12 col-sm" style="min-width: 0">
         <div class="eyebrow q-mb-xs">{{ tituloVeredito }}</div>
         <p class="q-mb-md text-body1" style="color: var(--color-paper); max-width: 56ch">
           {{ resultado.justificativa }}

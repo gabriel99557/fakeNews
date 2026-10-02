@@ -34,3 +34,4 @@ build/
 
 ### Segredos locais (chave da Groq etc.) ###
 /config/
+/application.properties
