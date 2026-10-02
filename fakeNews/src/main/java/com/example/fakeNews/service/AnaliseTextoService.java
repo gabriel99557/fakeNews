@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 /**
@@ -52,16 +53,18 @@ public class AnaliseTextoService {
     }
 
     /** Pipeline usando o modelo em nuvem (Groq/OpenAI-compatible via Spring AI). */
-    public AnaliseResponse analisar(String conteudo) {
-        return executarPipeline(conteudo, "nuvem", this::chamarIaNuvem);
+    public AnaliseResponse analisar(String conteudo, Long usuarioId) {
+        return executarPipeline(conteudo, "nuvem", usuarioId, this::chamarIaNuvem);
     }
 
     /** Mesmo pipeline, usando o modelo local fine-tuned (Llama 3 + LoRA via Ollama). */
-    public AnaliseResponse analisarLocal(String conteudo) {
-        return executarPipeline(conteudo, "local", this::chamarIaLocal);
+    public AnaliseResponse analisarLocal(String conteudo, Long usuarioId) {
+        return executarPipeline(conteudo, "local", usuarioId, this::chamarIaLocal);
     }
 
-    private AnaliseResponse executarPipeline(String conteudo, String modelo, Function<String, String> chamadaIa) {
+    /** @param usuarioId usuário logado, ou null para análises anônimas (não entram em nenhum histórico pessoal). */
+    private AnaliseResponse executarPipeline(String conteudo, String modelo, Long usuarioId,
+                                             Function<String, String> chamadaIa) {
         String origem;
         String textoParaAnalise;
 
@@ -78,10 +81,13 @@ public class AnaliseTextoService {
         String textoHigienizado = higienizar(textoParaAnalise);
         String respostaBruta = chamadaIa.apply(textoHigienizado);
         AnaliseResponse resultado = parserService.parsear(respostaBruta, origem);
+        // O id é gerado aqui (e não pelo banco) para já ir na resposta,
+        // permitindo validar/anotar o resultado antes da gravação terminar.
+        resultado.setId(UUID.randomUUID());
 
         //  dispara a persistência em background
         // sem bloquear a resposta que já será devolvida ao usuário.
-        historicoService.salvarAnaliseAsync(conteudo, origem, modelo, resultado);
+        historicoService.salvarAnaliseAsync(conteudo, origem, modelo, usuarioId, resultado);
 
         return resultado;
     }

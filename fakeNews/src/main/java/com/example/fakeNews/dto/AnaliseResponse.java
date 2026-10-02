@@ -5,9 +5,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AnaliseResponse {
+
+    /** Identificador da análise no histórico — usado para validar/anotar o resultado. */
+    private UUID id;
 
     /** VERDADEIRO, FALSO ou INCONCLUSIVO */
     private String veredito;
@@ -27,6 +31,14 @@ public class AnaliseResponse {
 
     public AnaliseResponse() {
         this.dataAnalise = LocalDateTime.now();
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getVeredito() {

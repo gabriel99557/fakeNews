@@ -5,10 +5,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
-/** Um registro do histórico de análises, como exposto pela API (RF03). */
+/** Um registro do histórico de análises, com a validação e as anotações do usuário (RF03 + Seção IV.H). */
 public record HistoricoItemResponse(
-        Long id,
+        UUID id,
         String conteudoOriginal,
         String origem,
         String modelo,
@@ -17,7 +18,13 @@ public record HistoricoItemResponse(
         String justificativa,
         List<String> indicadores,
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-        LocalDateTime dataAnalise
+        LocalDateTime dataAnalise,
+        /** CONCORDO, DISCORDO ou null (ainda não avaliado) */
+        String avaliacaoUsuario,
+        String vereditoUsuario,
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        LocalDateTime dataAvaliacao,
+        List<NotaResponse> notas
 ) {
 
     public static HistoricoItemResponse de(Analise analise) {
@@ -30,7 +37,11 @@ public record HistoricoItemResponse(
                 analise.getProbabilidadeFake(),
                 analise.getJustificativa(),
                 analise.getIndicadores(),
-                analise.getDataAnalise()
+                analise.getDataAnalise(),
+                analise.getAvaliacaoUsuario() != null ? analise.getAvaliacaoUsuario().name() : null,
+                analise.getVereditoUsuario(),
+                analise.getDataAvaliacao(),
+                analise.getNotas().stream().map(NotaResponse::de).toList()
         );
     }
 }

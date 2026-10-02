@@ -1,13 +1,18 @@
 package com.example.fakeNews.exception;
 
 import com.example.fakeNews.dto.ErroResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDateTime;
 
@@ -18,6 +23,8 @@ import java.time.LocalDateTime;
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErroResponse> handleValidacao(MethodArgumentNotValidException ex) {
@@ -45,7 +52,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ErroProcessamentoIAException.class)
     public ResponseEntity<ErroResponse> handleErroIA(ErroProcessamentoIAException ex) {
-        return construir(HttpStatus.BAD_GATEWAY, ex.getMessage());
+        // O detalhe técnico (ex.: resposta bruta do provedor) fica só no log do servidor
+        log.warn("Falha no processamento da IA: {}", ex.getMessage());
+        return construir(HttpStatus.BAD_GATEWAY,
+                "Não foi possível concluir a análise com o modelo de IA agora. Tente novamente em instantes.");
     }
 
     @ExceptionHandler(RecursoNaoEncontradoException.class)
@@ -58,9 +68,41 @@ public class GlobalExceptionHandler {
         return construir(HttpStatus.BAD_REQUEST, "Parâmetro inválido: " + ex.getName());
     }
 
+    @ExceptionHandler(RequisicaoInvalidaException.class)
+    public ResponseEntity<ErroResponse> handleRequisicaoInvalida(RequisicaoInvalidaException ex) {
+        return construir(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(EmailJaCadastradoException.class)
+    public ResponseEntity<ErroResponse> handleEmailJaCadastrado(EmailJaCadastradoException ex) {
+        return construir(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(CredenciaisInvalidasException.class)
+    public ResponseEntity<ErroResponse> handleCredenciaisInvalidas(CredenciaisInvalidasException ex) {
+        return construir(HttpStatus.UNAUTHORIZED, ex.getMessage());
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErroResponse> handleCorpoInvalido(HttpMessageNotReadableException ex) {
+        return construir(HttpStatus.BAD_REQUEST, "Corpo da requisição ausente ou em formato JSON inválido.");
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErroResponse> handleRotaInexistente(NoResourceFoundException ex) {
+        return construir(HttpStatus.NOT_FOUND, "Recurso não encontrado: /" + ex.getResourcePath());
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErroResponse> handleMetodoNaoSuportado(HttpRequestMethodNotSupportedException ex) {
+        return construir(HttpStatus.METHOD_NOT_ALLOWED, "Método " + ex.getMethod() + " não suportado nesta rota.");
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErroResponse> handleGenerico(Exception ex) {
-        return construir(HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno inesperado: " + ex.getMessage());
+        // Detalhes ficam no log do servidor; o cliente recebe uma mensagem genérica
+        log.error("Erro inesperado ao processar a requisição", ex);
+        return construir(HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno inesperado. Tente novamente mais tarde.");
     }
 
     private ResponseEntity<ErroResponse> construir(HttpStatus status, String mensagem) {
