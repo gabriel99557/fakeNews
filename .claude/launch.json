@@ -6,6 +6,26 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["--prefix", "crivo-frontend", "run", "dev"],
       "port": 9000
+    },
+    {
+      "name": "frontend",
+      "runtimeExecutable": "powershell",
+      "runtimeArgs": [
+        "-NoProfile",
+        "-Command",
+        "$env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User'); Set-Location \"$PWD\\crivo-frontend\"; npm.cmd run dev"
+      ],
+      "port": 9000
+    },
+    {
+      "name": "backend",
+      "runtimeExecutable": "powershell",
+      "runtimeArgs": [
+        "-NoProfile",
+        "-Command",
+        "$env:JAVA_HOME = [Environment]::GetEnvironmentVariable('JAVA_HOME','Machine').TrimEnd('\\'); $env:Path = \"$env:JAVA_HOME\\bin;\" + [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User'); foreach ($v in 'GROQ_API_KEY','DB_URL','DB_USERNAME','DB_PASSWORD') { $val = [Environment]::GetEnvironmentVariable($v,'User'); if ($val) { Set-Item \"env:$v\" $val } }; if (-not $env:GROQ_API_KEY) { $env:GROQ_API_KEY = 'nao-configurada' }; Set-Location \"$PWD\\fakeNews\"; .\\mvnw.cmd spring-boot:run"
+      ],
+      "port": 8080
     }
   ]
 }
