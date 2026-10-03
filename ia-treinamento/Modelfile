@@ -1,0 +1,25 @@
+# Modelfile do CrivoNews — importa o modelo treinado no Ollama com o nome que o backend usa.
+#
+# Copie este arquivo para a mesma pasta do crivo.Q4_K_M.gguf (ex.: C:\modelos\crivo\) e rode lá:
+#     ollama create meu-llama-tcc -f Modelfile
+#
+# O TEMPLATE é o do Llama 3 sem mensagem de sistema: o backend envia o PROMPT_SISTEMA dentro do
+# próprio prompt (mensagem de usuário), exatamente como no treino (template "llama-3" do notebook).
+
+FROM ./crivo.Q4_K_M.gguf
+
+TEMPLATE """{{ if .System }}<|start_header_id|>system<|end_header_id|>
+
+{{ .System }}<|eot_id|>{{ end }}{{ if .Prompt }}<|start_header_id|>user<|end_header_id|>
+
+{{ .Prompt }}<|eot_id|>{{ end }}<|start_header_id|>assistant<|end_header_id|>
+
+{{ .Response }}<|eot_id|>"""
+
+PARAMETER stop "<|start_header_id|>"
+PARAMETER stop "<|end_header_id|>"
+PARAMETER stop "<|eot_id|>"
+
+# Temperatura baixa: a saída é um JSON estruturado, não texto criativo
+PARAMETER temperature 0.2
+PARAMETER num_ctx 4096

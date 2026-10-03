@@ -9,6 +9,7 @@ Trabalho Final de Graduação — Ciência da Computação, Universidade Francis
 |---|---|
 | `fakeNews/` | Backend — API REST em Spring Boot (Java), orquestra scraping, inferência de IA e persistência |
 | `crivo-frontend/` | Frontend — SPA em Vue 3 + Quasar (Vite) |
+| `ia-treinamento/` | Fine-tuning do Llama 3.1 8B com LoRA que gera o modelo local `meu-llama-tcc` (ver README da pasta) |
 
 ## Como rodar
 

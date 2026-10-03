@@ -1,0 +1,11 @@
+# Corpus baixado, anotações da Groq, datasets gerados e resultados da avaliação
+dados/
+resultados/
+
+# Modelos (vários GB)
+*.gguf
+crivo-lora/
+outputs/
+
+__pycache__/
+.ipynb_checkpoints/
