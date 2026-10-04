@@ -1,0 +1,2 @@
+# Os scripts gravam JSONL com LF; manter LF também no checkout do Windows evita finais de linha misturados
+*.jsonl text eol=lf

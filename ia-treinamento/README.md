@@ -2,6 +2,8 @@
 
 Gera o modelo `meu-llama-tcc` que o backend usa em `POST /api/analise/texto/local`.
 
+> **Progresso atual e como continuar:** veja [ESTADO.md](ESTADO.md).
+
 ```
 Fake.Br Corpus ──► 1_preparar_corpus ──► 2_gerar_justificativas (Groq) ──► 3_montar_dataset
                                                                                 │

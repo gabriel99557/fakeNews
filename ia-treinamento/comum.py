@@ -62,13 +62,19 @@ def prompt_local(texto: str) -> str:
     return PROMPT_SISTEMA + "\n\nTexto para análise:\n" + higienizar(texto)
 
 
+def _normalizar_hifens(texto: str) -> str:
+    """O modelo professor às vezes usa hífen inseparável (U+2011) ou U+2010 em palavras como
+    "trata-se"; troca pelo hífen comum para o modelo treinado não aprender esse artefato."""
+    return texto.replace("‑", "-").replace("‐", "-").strip()
+
+
 def resposta_canonica(veredito: str, probabilidade: int, justificativa: str, indicadores: list) -> str:
     """JSON de saída no formato e na ordem de campos do PROMPT_SISTEMA."""
     return json.dumps({
         "veredito": veredito,
         "probabilidadeFake": int(probabilidade),
-        "justificativa": justificativa.strip(),
-        "indicadores": [i.strip() for i in indicadores],
+        "justificativa": _normalizar_hifens(justificativa),
+        "indicadores": [_normalizar_hifens(i) for i in indicadores],
     }, ensure_ascii=False)
 
 
