@@ -1,4 +1,4 @@
-# Estado do treinamento — atualizado em 04/10/2026
+# Estado do treinamento — atualizado em 05/10/2026
 
 Anotações para continuar o trabalho em outro computador. O passo a passo completo está no [README](README.md).
 
@@ -7,12 +7,14 @@ Anotações para continuar o trabalho em outro computador. O passo a passo compl
 | Passo | Situação |
 |---|---|
 | 1. Preparar corpus | ✅ Feito. `dados/base.jsonl` versionado (7.200 notícias: treino 5.762, validação 720, teste 718) |
-| 2. Justificativas (Groq) | ⏳ **782 de 1.200** em `dados/anotacoes.jsonl` (0 falhas). Falta 1 rodada |
+| 2. Justificativas (Groq) | ⏳ **1.098 de 1.200** em `dados/anotacoes.jsonl` (0 falhas; 549 FALSO / 549 VERDADEIRO). Faltam 102 (1 rodada curta) |
 | 3. Montar dataset | Roda em segundos depois do passo 2 |
 | 4. Treinar no Colab | Notebook já está no Google Drive (ver abaixo) |
 | 5. Ollama + avaliação | Depois do treino |
 
-## Próximo passo: dia 3
+## Próximo passo: dia 4
+
+Dia 3 (05/10): +316 anotações, parou no limite diário de tokens. Falta uma rodada curta (~102 notícias, ~10 min).
 
 No outro computador:
 
@@ -40,7 +42,8 @@ rode o notebook (passo 4 do README). Lembre de commitar o `dados/anotacoes.jsonl
 
 ## Limite da Groq (importante)
 
-- Plano gratuito do `openai/gpt-oss-120b`: **200.000 tokens por dia** (TPD). Cada notícia gasta ~530 tokens → **~376 por rodada**.
+- Plano gratuito do `openai/gpt-oss-120b`: **200.000 tokens por dia** (TPD). Cada notícia gasta ~530–630 tokens → **~316 a 376 por rodada**
+  (no dia 3 rendeu 316).
 - Os tokens só voltam ~24 h depois de gastos. Rodar de novo no mesmo dia quase não rende; faça uma rodada por dia.
 - O script para sozinho ao atingir o limite e retoma de onde parou na próxima execução.
 - É a mesma cota da análise "Nuvem (Groq)" do site: durante a rodada, ela pode falhar.
