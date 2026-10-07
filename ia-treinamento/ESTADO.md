@@ -1,4 +1,4 @@
-# Estado do treinamento — atualizado em 05/10/2026
+# Estado do treinamento — atualizado em 06/10/2026
 
 Anotações para continuar o trabalho em outro computador. O passo a passo completo está no [README](README.md).
 
@@ -7,38 +7,34 @@ Anotações para continuar o trabalho em outro computador. O passo a passo compl
 | Passo | Situação |
 |---|---|
 | 1. Preparar corpus | ✅ Feito. `dados/base.jsonl` versionado (7.200 notícias: treino 5.762, validação 720, teste 718) |
-| 2. Justificativas (Groq) | ⏳ **1.098 de 1.200** em `dados/anotacoes.jsonl` (0 falhas; 549 FALSO / 549 VERDADEIRO). Faltam 102 (1 rodada curta) |
-| 3. Montar dataset | Roda em segundos depois do passo 2 |
-| 4. Treinar no Colab | Notebook já está no Google Drive (ver abaixo) |
+| 2. Justificativas (Groq) | ✅ **1.200 de 1.200** em `dados/anotacoes.jsonl` (0 falhas; 600 falsas / 600 verdadeiras) |
+| 3. Montar dataset | ✅ `treino.jsonl` 1.106 exemplos (539 FALSO / 539 VERDADEIRO / 28 INCONCLUSIVO) e `validacao.jsonl` 129 (61 / 61 / 7) |
+| 4. Treinar no Colab | ⏳ **Próximo passo.** Notebook já está no Google Drive (ver abaixo) |
 | 5. Ollama + avaliação | Depois do treino |
 
-## Próximo passo: dia 4
+Histórico do passo 2: dia 3 (05/10) +316 anotações até o limite diário; 06/10 +102 para completar as 1.200.
 
-Dia 3 (05/10): +316 anotações, parou no limite diário de tokens. Falta uma rodada curta (~102 notícias, ~10 min).
+## Próximo passo: treinar
 
-No outro computador:
+1. **Revise os 35 exemplos de `inconclusivos_manual.jsonl`** (pendência abaixo). Se alterar algum, rode de novo
+   `python 3_montar_dataset.py` (leva segundos).
+2. Envie `dados/treino.jsonl` e `dados/validacao.jsonl` para a pasta **crivonews** do Google Drive.
+   Esses dois arquivos **não** são versionados; em outro computador, gere-os com:
 
-```bash
-git clone https://github.com/gabriel99557/fakeNews.git
-cd fakeNews
-git checkout feature/autenticacao-anotacoes
-cd ia-treinamento
-python 2_gerar_justificativas.py --total 1200
-```
+   ```bash
+   git clone https://github.com/gabriel99557/fakeNews.git
+   cd fakeNews
+   git checkout feature/autenticacao-anotacoes
+   cd ia-treinamento
+   python 3_montar_dataset.py
+   ```
+
+3. Abra o notebook no Colab com **GPU T4** e execute as células em ordem (passo 4 do README).
+4. Baixe `crivo.Q4_K_M.gguf`, importe no Ollama como `meu-llama-tcc` (passo 5) e rode a avaliação (passo 6).
 
 - Precisa só de **Python 3** (os scripts usam apenas a biblioteca padrão, sem `pip install`).
-- A chave da Groq é lida de `fakeNews/application.properties` (versionado nesta branch) ou da variável `GROQ_API_KEY`.
-- **Não rode o passo 1 de novo**: `dados/base.jsonl` já está no repositório e as anotações dependem dessa divisão.
-  Regravá-lo poderia misturar notícias do teste com as do treino.
-
-Depois que chegar a 1.200:
-
-```bash
-python 3_montar_dataset.py
-```
-
-Isso gera `dados/treino.jsonl` e `dados/validacao.jsonl`. Envie os dois para a pasta **crivonews** do Google Drive e
-rode o notebook (passo 4 do README). Lembre de commitar o `dados/anotacoes.jsonl` atualizado.
+- **Não rode os passos 1 e 2 de novo**: `dados/base.jsonl` e `dados/anotacoes.jsonl` estão completos no repositório.
+  Regravar o passo 1 poderia misturar notícias do teste com as do treino.
 
 ## Limite da Groq (importante)
 
