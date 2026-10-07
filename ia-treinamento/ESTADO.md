@@ -1,4 +1,4 @@
-# Estado do treinamento — atualizado em 06/10/2026
+# Estado do treinamento — atualizado em 07/10/2026
 
 Anotações para continuar o trabalho em outro computador. O passo a passo completo está no [README](README.md).
 
@@ -9,32 +9,44 @@ Anotações para continuar o trabalho em outro computador. O passo a passo compl
 | 1. Preparar corpus | ✅ Feito. `dados/base.jsonl` versionado (7.200 notícias: treino 5.762, validação 720, teste 718) |
 | 2. Justificativas (Groq) | ✅ **1.200 de 1.200** em `dados/anotacoes.jsonl` (0 falhas; 600 falsas / 600 verdadeiras) |
 | 3. Montar dataset | ✅ `treino.jsonl` 1.099 exemplos (539 FALSO / 539 VERDADEIRO / 21 INCONCLUSIVO) e `validacao.jsonl` 129 (61 / 61 / 7) |
-| 4. Treinar no Colab | ⏳ **Próximo passo.** Notebook já está no Google Drive (ver abaixo) |
-| 5. Ollama + avaliação | Depois do treino |
+| 4. Treinar no Colab | ✅ Feito em 06–07/10 (ver "Resultado do treino") |
+| 5. Ollama + avaliação | ⏳ **Próximo passo** |
 
 Histórico do passo 2: dia 3 (05/10) +316 anotações até o limite diário; 06/10 +102 para completar as 1.200.
 
-## Próximo passo: treinar
+## Resultado do treino (06–07/10/2026)
 
-1. ✅ Inconclusivos revisados (06/10): 7 dos 35 eram reportagens corretas sobre fatos em andamento e foram
-   removidos; ficaram 28. Se alterar o arquivo de novo, rode `python 3_montar_dataset.py` (leva segundos).
-2. Envie `dados/treino.jsonl` e `dados/validacao.jsonl` para a pasta **crivonews** do Google Drive.
-   Esses dois arquivos **não** são versionados; em outro computador, gere-os com:
+Colab gratuito, GPU T4, conta **gabrielmatheus9845@gmail.com** (pasta `Meu Drive/crivonews` dessa conta).
+
+| | |
+|---|---|
+| Exemplos | 1.095 de treino (4 descartados por passarem de 2.048 tokens) e 129 de validação |
+| Configuração | QLoRA 4 bits, `r=16`, `alpha=16`, 2 épocas, lote efetivo 8, `lr=2e-4` → 274 passos |
+| Parâmetros treinados | 41,9 mi de 8,07 bi (0,52%) |
+| Duração | 1h19min de treino + ~50 min de exportação (merge 16 bits + GGUF) |
+| *Loss* (treino / validação) | passo 100: 0,511 / 0,526 · passo 200: 0,391 / 0,481 · **final (274): 0,383 / 0,468** |
+| Teste rápido (1 exemplo da validação) | gerou `FALSO`, 82, igual ao esperado; JSON válido |
+
+A *loss* de validação caiu em todas as medições: sem sinal de *overfitting*.
+
+Arquivos gerados, em `Meu Drive/crivonews`:
+
+- `crivo.Q4_K_M.gguf` (4,92 GB): modelo para o Ollama
+- `historico_treino.csv`: curva de *loss* (gráfico do capítulo de resultados)
+- `crivo-lora/`: apenas o adaptador LoRA (pequeno; guardar)
+
+## Próximo passo: Ollama + avaliação
+
+1. Baixe `crivo.Q4_K_M.gguf` do Drive para uma pasta **fora do OneDrive**, por exemplo `C:\modelos\crivo\`, e copie
+   o `Modelfile` desta pasta para lá.
+2. Substitua o modelo antigo (o `meu-llama-tcc` atual é o classificador binário antigo, que responde só "Fato"/"Fake News"):
 
    ```bash
-   git clone https://github.com/gabriel99557/fakeNews.git
-   cd fakeNews
-   git checkout feature/autenticacao-anotacoes
-   cd ia-treinamento
-   python 3_montar_dataset.py
+   ollama rm meu-llama-tcc
+   ollama create meu-llama-tcc -f Modelfile
    ```
 
-3. Abra o notebook no Colab com **GPU T4** e execute as células em ordem (passo 4 do README).
-4. Baixe `crivo.Q4_K_M.gguf`, importe no Ollama como `meu-llama-tcc` (passo 5) e rode a avaliação (passo 6).
-
-- Precisa só de **Python 3** (os scripts usam apenas a biblioteca padrão, sem `pip install`).
-- **Não rode os passos 1 e 2 de novo**: `dados/base.jsonl` e `dados/anotacoes.jsonl` estão completos no repositório.
-  Regravar o passo 1 poderia misturar notícias do teste com as do treino.
+3. Teste pelo site com "Llama 3 local" e rode a avaliação (passo 6 do README), comparando base × treinado × Groq.
 
 ## Limite da Groq (importante)
 
