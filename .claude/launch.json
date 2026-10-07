@@ -26,6 +26,16 @@
         "$env:JAVA_HOME = [Environment]::GetEnvironmentVariable('JAVA_HOME','Machine').TrimEnd('\\'); $env:Path = \"$env:JAVA_HOME\\bin;\" + [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User'); foreach ($v in 'GROQ_API_KEY','DB_URL','DB_USERNAME','DB_PASSWORD') { $val = [Environment]::GetEnvironmentVariable($v,'User'); if ($val) { Set-Item \"env:$v\" $val } }; if (-not $env:GROQ_API_KEY) { $env:GROQ_API_KEY = 'nao-configurada' }; Set-Location \"$PWD\\fakeNews\"; .\\mvnw.cmd spring-boot:run"
       ],
       "port": 8080
+    },
+    {
+      "name": "backend-h2",
+      "runtimeExecutable": "powershell",
+      "runtimeArgs": [
+        "-NoProfile",
+        "-Command",
+        "Set-Location \"$PWD\\fakeNews\"; .\\mvnw.cmd -q spring-boot:run \"-Dspring-boot.run.profiles=h2\""
+      ],
+      "port": 8080
     }
   ]
 }
