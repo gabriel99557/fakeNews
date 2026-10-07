@@ -10,7 +10,8 @@ Anotações para continuar o trabalho em outro computador. O passo a passo compl
 | 2. Justificativas (Groq) | ✅ **1.200 de 1.200** em `dados/anotacoes.jsonl` (0 falhas; 600 falsas / 600 verdadeiras) |
 | 3. Montar dataset | ✅ `treino.jsonl` 1.099 exemplos (539 FALSO / 539 VERDADEIRO / 21 INCONCLUSIVO) e `validacao.jsonl` 129 (61 / 61 / 7) |
 | 4. Treinar no Colab | ✅ Feito em 06–07/10 (ver "Resultado do treino") |
-| 5. Ollama + avaliação | ⏳ **Próximo passo** |
+| 5. Ollama | ✅ Importado em 07/10 como `meu-llama-tcc` (modelo antigo removido) |
+| 6. Avaliação | ⏳ **Próximo passo** |
 
 Histórico do passo 2: dia 3 (05/10) +316 anotações até o limite diário; 06/10 +102 para completar as 1.200.
 
@@ -35,18 +36,35 @@ Arquivos gerados, em `Meu Drive/crivonews`:
 - `historico_treino.csv`: curva de *loss* (gráfico do capítulo de resultados)
 - `crivo-lora/`: apenas o adaptador LoRA (pequeno; guardar)
 
-## Próximo passo: Ollama + avaliação
+## Importação no Ollama (07/10/2026)
 
-1. Baixe `crivo.Q4_K_M.gguf` do Drive para uma pasta **fora do OneDrive**, por exemplo `C:\modelos\crivo\`, e copie
-   o `Modelfile` desta pasta para lá.
-2. Substitua o modelo antigo (o `meu-llama-tcc` atual é o classificador binário antigo, que responde só "Fato"/"Fake News"):
+- GGUF baixado do Drive para `C:\modelos\crivo\crivo.Q4_K_M.gguf` (4.920.734.976 bytes), com o `Modelfile` ao lado.
+- `ollama rm meu-llama-tcc` (classificador binário antigo) e `ollama create meu-llama-tcc -f Modelfile`.
+- Teste com o mesmo prompt do backend: 3 de 3 corretos e JSON válido em todos.
 
-   ```bash
-   ollama rm meu-llama-tcc
-   ollama create meu-llama-tcc -f Modelfile
-   ```
+| Caso | Veredito | % fake | Tempo |
+|---|---|---|---|
+| Notícia falsa inventada (cura do câncer) | FALSO | 82 | 41 s (inclui carregar o modelo) |
+| Notícia verdadeira em estilo de jornal (IBGE) | VERDADEIRO | 8 | 22 s |
+| Boato sem confirmação (falta de água) | INCONCLUSIVO | 50 | 19 s |
 
-3. Teste pelo site com "Llama 3 local" e rode a avaliação (passo 6 do README), comparando base × treinado × Groq.
+- Pelo site (Llama 3 local), o boato da poupança saiu FALSO, 82%. O frontend passou a esperar até 180 s
+  pelo modelo local (antes, 30 s, o que estourava). Nesta máquina parte do modelo roda na CPU.
+
+## Próximo passo: avaliação (capítulo de resultados)
+
+```bash
+ollama pull llama3.1:8b
+```
+
+```bash
+python 5_avaliar.py --modelo ollama:llama3.1:8b --modelo ollama:meu-llama-tcc --modelo groq:openai/gpt-oss-120b
+```
+
+- São 200 notícias do teste por modelo (`--limite 0` para as 718). Com ~20 s por notícia no modelo local, conte
+  ~1h10 para cada modelo do Ollama. A parte da Groq consome a cota diária (~200 notícias cabem nela).
+- Observe a **% de INCONCLUSIVO** no resumo: o teste não tem casos inconclusivos, então previsões
+  INCONCLUSIVO ali indicam atalho de estilo.
 
 ## Limite da Groq (importante)
 

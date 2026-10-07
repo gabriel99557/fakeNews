@@ -46,6 +46,10 @@ for (const cliente of [api, apiAuth]) {
 
 // ---------- Análise ----------
 
+// O modelo local (Ollama) leva de 20 a 40 s nesta máquina, e mais na primeira chamada,
+// quando carrega o modelo na memória
+const TEMPO_LIMITE_MODELO_LOCAL = 180000
+
 /**
  * Envia texto bruto ou URL para análise.
  * @param {string} conteudo - texto da notícia ou URL
@@ -53,8 +57,10 @@ for (const cliente of [api, apiAuth]) {
  * @returns {Promise<import('axios').AxiosResponse>}
  */
 export function analisarConteudo(conteudo, modelo = 'nuvem') {
-  const caminho = modelo === 'local' ? '/texto/local' : '/texto'
-  return api.post(caminho, { conteudo })
+  if (modelo === 'local') {
+    return api.post('/texto/local', { conteudo }, { timeout: TEMPO_LIMITE_MODELO_LOCAL })
+  }
+  return api.post('/texto', { conteudo })
 }
 
 // ---------- Autenticação ----------
