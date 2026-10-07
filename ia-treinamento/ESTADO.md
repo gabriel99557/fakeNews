@@ -8,7 +8,7 @@ Anotações para continuar o trabalho em outro computador. O passo a passo compl
 |---|---|
 | 1. Preparar corpus | ✅ Feito. `dados/base.jsonl` versionado (7.200 notícias: treino 5.762, validação 720, teste 718) |
 | 2. Justificativas (Groq) | ✅ **1.200 de 1.200** em `dados/anotacoes.jsonl` (0 falhas; 600 falsas / 600 verdadeiras) |
-| 3. Montar dataset | ✅ `treino.jsonl` 1.106 exemplos (539 FALSO / 539 VERDADEIRO / 28 INCONCLUSIVO) e `validacao.jsonl` 129 (61 / 61 / 7) |
+| 3. Montar dataset | ✅ `treino.jsonl` 1.099 exemplos (539 FALSO / 539 VERDADEIRO / 21 INCONCLUSIVO) e `validacao.jsonl` 129 (61 / 61 / 7) |
 | 4. Treinar no Colab | ⏳ **Próximo passo.** Notebook já está no Google Drive (ver abaixo) |
 | 5. Ollama + avaliação | Depois do treino |
 
@@ -16,8 +16,8 @@ Histórico do passo 2: dia 3 (05/10) +316 anotações até o limite diário; 06/
 
 ## Próximo passo: treinar
 
-1. **Revise os 35 exemplos de `inconclusivos_manual.jsonl`** (pendência abaixo). Se alterar algum, rode de novo
-   `python 3_montar_dataset.py` (leva segundos).
+1. ✅ Inconclusivos revisados (06/10): 7 dos 35 eram reportagens corretas sobre fatos em andamento e foram
+   removidos; ficaram 28. Se alterar o arquivo de novo, rode `python 3_montar_dataset.py` (leva segundos).
 2. Envie `dados/treino.jsonl` e `dados/validacao.jsonl` para a pasta **crivonews** do Google Drive.
    Esses dois arquivos **não** são versionados; em outro computador, gere-os com:
 
@@ -53,7 +53,9 @@ Histórico do passo 2: dia 3 (05/10) +316 anotações até o limite diário; 06/
 
 ## Pendências
 
-- **Revisar os 35 exemplos de `inconclusivos_manual.jsonl`** (escritos com auxílio de IA) antes do treino.
+- Na avaliação (passo 5), observar a **% de INCONCLUSIVO no conjunto de teste**: ele não tem casos inconclusivos,
+  então previsões INCONCLUSIVO ali indicam que o modelo aprendeu um atalho de estilo (os exemplos manuais usam
+  mais "informou que", "especialistas" e "segundo" do que as notícias do Fake.Br).
 - A probabilidade gerada para as notícias falsas ficou concentrada em 78–82; aceitável, já que o veredito é o principal.
 - O modelo treinado deve ser importado no Ollama com o nome exato `meu-llama-tcc` (fixo no `AnaliseTextoService`).
 - Hardware do PC original: GPU AMD RX 6650 XT (sem CUDA), por isso o treino é no Colab. Se o outro computador tiver

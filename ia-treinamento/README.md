@@ -62,9 +62,11 @@ python 3_montar_dataset.py
 ```
 
 Gera `dados/treino.jsonl` e `dados/validacao.jsonl`. Inclui os exemplos de `inconclusivos_manual.jsonl`,
-porque o Fake.Br não tem casos INCONCLUSIVO. O arquivo tem 35 exemplos escritos para o projeto (com
-auxílio de IA, **revise-os antes do treino**): opinião, boato sem confirmação, versões conflitantes,
-previsões, estudos preliminares, estimativas divergentes e sátira declarada. Não citam pessoas reais.
+porque o Fake.Br não tem casos INCONCLUSIVO. O arquivo tem 28 exemplos escritos para o projeto (com
+auxílio de IA, revisados em 06/10/2026): opinião, boato sem confirmação, versões conflitantes,
+previsões, alegações sem comprovação, estimativas divergentes e sátira declarada. Reportagens corretas sobre
+assuntos ainda em andamento (acidente, investigação, estudo preliminar bem descrito) **não** entram aqui: no
+Fake.Br elas seriam VERDADEIRO, e rotulá-las como INCONCLUSIVO ensinaria o modelo a duvidar de notícias reais. Não citam pessoas reais.
 O tamanho dos textos foi aproximado ao do corpus (mediana ~750 vs. ~950 caracteres) para que o
 modelo não aprenda "texto curto = inconclusivo". Para acrescentar mais, use o mesmo formato, um JSON por linha.
 
