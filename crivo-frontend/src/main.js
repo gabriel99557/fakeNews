@@ -7,6 +7,7 @@ import './css/app.scss'
 
 import App from './App.vue'
 import router from './router'
+import { iniciarTema } from './services/tema.js'
 
 const app = createApp(App)
 
@@ -21,5 +22,7 @@ app.use(Quasar, {
     }
   }
 })
+
+iniciarTema()
 
 app.mount('#app')

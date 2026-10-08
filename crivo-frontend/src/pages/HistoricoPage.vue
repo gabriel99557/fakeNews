@@ -8,7 +8,7 @@
       <section class="q-mb-lg">
         <div class="eyebrow q-mb-sm">Histórico de consultas</div>
         <h1 class="font-display q-mt-none q-mb-sm hero-title">Análises anteriores.</h1>
-        <p class="text-body1 q-mb-none" style="max-width: 52ch; color: var(--color-paper-dim)">
+        <p class="text-body1 q-mb-none" style="max-width: 52ch; color: var(--cor-texto-suave)">
           Suas verificações, das mais recentes para as mais antigas. Abra uma análise para
           rever o veredito, registrar se você concorda com a IA e guardar suas anotações.
         </p>
@@ -23,10 +23,9 @@
             v-model="filtroVeredito"
             no-caps
             unelevated
-            toggle-color="orange-6"
-            toggle-text-color="dark"
-            color="grey-9"
-            text-color="grey-4"
+            toggle-color="primary"
+            color="neutro"
+            text-color="neutro-texto"
             class="font-mono filtro-toggle"
             :options="opcoesFiltro"
           />
@@ -37,16 +36,15 @@
             v-model="filtroAvaliacao"
             no-caps
             unelevated
-            toggle-color="orange-6"
-            toggle-text-color="dark"
-            color="grey-9"
-            text-color="grey-4"
+            toggle-color="primary"
+            color="neutro"
+            text-color="neutro-texto"
             class="font-mono filtro-toggle"
             :options="opcoesAvaliacao"
           />
         </div>
         </div>
-        <span v-if="pagina" class="font-mono text-caption" style="color: var(--color-paper-dim)">
+        <span v-if="pagina" class="font-mono text-caption" style="color: var(--cor-texto-suave)">
           {{ pagina.totalItens }} {{ pagina.totalItens === 1 ? 'análise' : 'análises' }}
         </span>
       </section>
@@ -62,16 +60,16 @@
 
       <!-- Carregando (primeira carga) -->
       <div v-else-if="carregando && !pagina" class="lista">
-        <q-skeleton v-for="n in 4" :key="n" type="rect" height="84px" dark class="skeleton" />
+        <q-skeleton v-for="n in 4" :key="n" type="rect" height="84px" class="skeleton" />
       </div>
 
       <!-- Vazio -->
       <div v-else-if="pagina && pagina.itens.length === 0" class="vazio q-pa-xl text-center">
-        <q-icon name="history" size="36px" style="color: var(--color-paper-dim)" />
-        <div class="font-display q-mt-sm q-mb-xs" style="font-size: 1.15rem; color: var(--color-paper)">
+        <q-icon name="history" size="36px" style="color: var(--cor-texto-suave)" />
+        <div class="font-display q-mt-sm q-mb-xs" style="font-size: 1.15rem; color: var(--cor-texto)">
           {{ temFiltro ? 'Nenhuma análise com esses filtros.' : 'Nenhuma análise registrada ainda.' }}
         </div>
-        <div class="text-body2 q-mb-md" style="color: var(--color-paper-dim)">
+        <div class="text-body2 q-mb-md" style="color: var(--cor-texto-suave)">
           {{ temFiltro ? 'Tente remover algum filtro.' : 'As verificações feitas com você logado aparecem aqui.' }}
         </div>
         <q-btn
@@ -79,8 +77,7 @@
           to="/"
           unelevated
           no-caps
-          color="orange-6"
-          text-color="dark"
+          color="primary"
           class="font-mono"
           label="Fazer uma análise"
         />
@@ -145,9 +142,8 @@
           :max-pages="6"
           boundary-numbers
           direction-links
-          color="grey-7"
-          active-color="orange-6"
-          active-text-color="dark"
+          color="neutro-texto"
+          active-color="primary"
           class="font-mono"
           @update:model-value="irParaPagina"
         />
@@ -266,12 +262,12 @@ onMounted(carregar)
 
 .skeleton {
   border-radius: 4px;
-  background: var(--color-ink-soft);
+  background: var(--cor-superficie);
 }
 
 .vazio {
-  background: var(--color-ink-soft);
-  border: 1px dashed var(--color-ink-line);
+  background: var(--cor-superficie);
+  border: 1px dashed var(--cor-borda);
   border-radius: 4px;
 }
 
@@ -284,8 +280,8 @@ onMounted(carregar)
   font: inherit;
   color: inherit;
   cursor: pointer;
-  background: var(--color-ink-soft);
-  border: 1px solid var(--color-ink-line);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
   border-left-width: 4px;
   border-radius: 4px;
   padding: 14px 16px;
@@ -294,17 +290,17 @@ onMounted(carregar)
 
 .item:hover,
 .item--aberto {
-  background: #212632;
+  background: var(--cor-superficie-hover);
 }
 
 .item:focus-visible {
-  outline: 2px solid var(--color-signal);
+  outline: 2px solid var(--cor-destaque);
   outline-offset: 2px;
 }
 
-.item--true { border-left-color: var(--color-true); }
-.item--false { border-left-color: var(--color-false); }
-.item--unclear { border-left-color: var(--color-unclear); }
+.item--true { border-left-color: var(--cor-verdadeiro); }
+.item--false { border-left-color: var(--cor-falso); }
+.item--unclear { border-left-color: var(--cor-inconclusivo); }
 
 .item-veredito {
   flex: 0 0 118px;
@@ -319,13 +315,13 @@ onMounted(carregar)
   letter-spacing: 0.08em;
 }
 
-.item--true .item-veredito-nome { color: var(--color-true); }
-.item--false .item-veredito-nome { color: var(--color-false); }
-.item--unclear .item-veredito-nome { color: var(--color-unclear); }
+.item--true .item-veredito-nome { color: var(--cor-verdadeiro); }
+.item--false .item-veredito-nome { color: var(--cor-falso); }
+.item--unclear .item-veredito-nome { color: var(--cor-inconclusivo); }
 
 .item-veredito-prob {
   font-size: 0.72rem;
-  color: var(--color-paper-dim);
+  color: var(--cor-texto-suave);
 }
 
 .item-corpo {
@@ -334,7 +330,7 @@ onMounted(carregar)
 }
 
 .item-conteudo {
-  color: var(--color-paper);
+  color: var(--cor-texto);
   font-size: 0.92rem;
   line-height: 1.45;
   display: -webkit-box;
@@ -350,7 +346,7 @@ onMounted(carregar)
   gap: 8px;
   margin-top: 6px;
   font-size: 0.7rem;
-  color: var(--color-paper-dim);
+  color: var(--cor-texto-suave);
 }
 
 .item-selo {
@@ -363,25 +359,25 @@ onMounted(carregar)
 }
 
 .item-selo--concordo {
-  color: var(--color-true);
-  border-color: var(--color-true);
-  background: var(--color-true-soft);
+  color: var(--cor-verdadeiro);
+  border-color: var(--cor-verdadeiro);
+  background: var(--cor-verdadeiro-suave);
 }
 
 .item-selo--discordo {
-  color: var(--color-false);
-  border-color: var(--color-false);
-  background: var(--color-false-soft);
+  color: var(--cor-falso);
+  border-color: var(--cor-falso);
+  background: var(--cor-falso-suave);
 }
 
 .item-selo--notas {
-  color: var(--color-signal);
-  border-color: var(--color-ink-line);
+  color: var(--cor-destaque);
+  border-color: var(--cor-borda);
 }
 
 .item-seta {
   flex: 0 0 auto;
-  color: var(--color-paper-dim);
+  color: var(--cor-texto-suave);
   transition: transform 180ms ease;
 }
 

@@ -11,7 +11,7 @@
           <h1 class="font-display q-mt-none q-mb-sm hero-title">
             {{ modo === 'entrar' ? 'Bem-vindo de volta.' : 'Crie sua conta.' }}
           </h1>
-          <p class="text-body1 q-mb-none" style="max-width: 40ch; color: var(--color-paper-dim)">
+          <p class="text-body1 q-mb-none" style="max-width: 40ch; color: var(--cor-texto-suave)">
             Com uma conta, suas análises ficam salvas no seu histórico pessoal e você pode
             validar cada veredito da IA e guardar suas próprias anotações e evidências.
           </p>
@@ -23,8 +23,8 @@
             dense
             no-caps
             align="left"
-            active-color="orange-6"
-            indicator-color="orange-6"
+            active-color="destaque"
+            indicator-color="destaque"
             class="font-mono q-mb-lg tabs-modo"
             @update:model-value="erro = ''"
           >
@@ -38,9 +38,8 @@
               v-model="nome"
               label="Nome"
               autocomplete="name"
-              dark
               filled
-              color="orange-6"
+              color="primary"
               maxlength="100"
               :disable="carregando"
               :rules="[v => (v && v.trim().length > 0) || 'Informe seu nome']"
@@ -51,9 +50,8 @@
               label="E-mail"
               type="email"
               autocomplete="email"
-              dark
               filled
-              color="orange-6"
+              color="primary"
               maxlength="255"
               :disable="carregando"
               :rules="[
@@ -67,9 +65,8 @@
               label="Senha"
               :type="mostrarSenha ? 'text' : 'password'"
               :autocomplete="modo === 'entrar' ? 'current-password' : 'new-password'"
-              dark
               filled
-              color="orange-6"
+              color="primary"
               maxlength="72"
               :disable="carregando"
               :hint="modo === 'cadastro' ? 'Mínimo de 8 caracteres' : undefined"
@@ -98,8 +95,7 @@
               type="submit"
               :loading="carregando"
               unelevated
-              color="orange-6"
-              text-color="dark"
+              color="primary"
               class="font-mono text-weight-medium q-mt-md"
               :label="modo === 'entrar' ? 'Entrar' : 'Criar conta'"
             />
@@ -177,13 +173,13 @@ function destinoSeguro(redirect) {
 }
 
 .console-panel {
-  background: var(--color-ink-soft);
-  border: 1px solid var(--color-ink-line);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
   border-radius: 4px;
 }
 
 .tabs-modo {
-  color: var(--color-paper-dim);
-  border-bottom: 1px solid var(--color-ink-line);
+  color: var(--cor-texto-suave);
+  border-bottom: 1px solid var(--cor-borda);
 }
 </style>

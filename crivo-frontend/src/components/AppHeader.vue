@@ -1,8 +1,8 @@
 <template>
   <header class="row items-center justify-between q-py-md" style="gap: 12px">
     <router-link to="/" class="row items-center marca" style="gap: 10px">
-      <q-icon name="fact_check" color="orange-6" size="22px" />
-      <span class="font-display text-weight-600" style="font-size: 1.15rem; color: var(--color-paper)">
+      <q-icon name="fact_check" color="destaque" size="22px" />
+      <span class="font-display text-weight-600" style="font-size: 1.15rem; color: var(--cor-texto)">
         CrivoNews
       </span>
     </router-link>
@@ -10,6 +10,19 @@
     <nav class="row items-center font-mono" style="gap: 4px">
       <router-link to="/" class="nav-link" exact-active-class="nav-link--ativo">Analisar</router-link>
       <router-link to="/historico" class="nav-link" active-class="nav-link--ativo">Histórico</router-link>
+
+      <q-btn
+        flat
+        round
+        dense
+        size="sm"
+        class="btn-tema"
+        :icon="tema === 'dark' ? 'light_mode' : 'dark_mode'"
+        :aria-label="tema === 'dark' ? 'Usar tema claro' : 'Usar tema escuro'"
+        @click="alternarTema"
+      >
+        <q-tooltip>{{ tema === 'dark' ? 'Tema claro' : 'Tema escuro' }}</q-tooltip>
+      </q-btn>
 
       <q-btn
         v-if="usuarioLogado"
@@ -20,13 +33,13 @@
         :aria-label="`Conta de ${usuarioLogado.nome}`"
       >
         <span class="avatar">{{ inicial }}</span>
-        <q-icon name="expand_more" size="16px" style="color: var(--color-paper-dim)" />
+        <q-icon name="expand_more" size="16px" style="color: var(--cor-texto-suave)" />
         <q-menu anchor="bottom right" self="top right" class="menu-usuario">
           <div class="q-px-md q-pt-md q-pb-sm">
-            <div class="text-weight-medium" style="color: var(--color-paper)">{{ usuarioLogado.nome }}</div>
-            <div class="font-mono text-caption" style="color: var(--color-paper-dim)">{{ usuarioLogado.email }}</div>
+            <div class="text-weight-medium" style="color: var(--cor-texto)">{{ usuarioLogado.nome }}</div>
+            <div class="font-mono text-caption" style="color: var(--cor-texto-suave)">{{ usuarioLogado.email }}</div>
           </div>
-          <q-separator dark />
+          <q-separator />
           <q-list dense>
             <q-item v-close-popup clickable to="/historico">
               <q-item-section avatar><q-icon name="history" size="18px" /></q-item-section>
@@ -46,8 +59,7 @@
         unelevated
         dense
         no-caps
-        color="orange-6"
-        text-color="dark"
+        color="primary"
         class="font-mono q-px-sm q-ml-xs btn-entrar"
         label="Entrar"
       />
@@ -60,6 +72,7 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Notify } from 'quasar'
 import { usuarioLogado, encerrarSessao } from '../services/auth.js'
+import { tema, alternarTema } from '../services/tema.js'
 
 const rotaAtual = useRoute()
 const router = useRouter()
@@ -83,7 +96,7 @@ function sair() {
 .nav-link {
   font-size: 0.78rem;
   letter-spacing: 0.04em;
-  color: var(--color-paper-dim);
+  color: var(--cor-texto-suave);
   text-decoration: none;
   padding: 6px 12px;
   border-radius: 4px;
@@ -92,18 +105,26 @@ function sair() {
 }
 
 .nav-link:hover {
-  color: var(--color-paper);
+  color: var(--cor-texto);
 }
 
 .nav-link:focus-visible {
-  outline: 2px solid var(--color-signal);
+  outline: 2px solid var(--cor-destaque);
   outline-offset: 2px;
 }
 
 .nav-link--ativo {
-  color: var(--color-signal);
-  border-color: var(--color-ink-line);
-  background: var(--color-ink-soft);
+  color: var(--cor-destaque);
+  border-color: var(--cor-borda);
+  background: var(--cor-superficie);
+}
+
+.btn-tema {
+  color: var(--cor-texto-suave);
+}
+
+.btn-tema:hover {
+  color: var(--cor-texto);
 }
 
 .btn-entrar {
@@ -117,9 +138,9 @@ function sair() {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: var(--color-signal-soft);
-  border: 1px solid var(--color-signal);
-  color: var(--color-signal);
+  background: var(--cor-destaque-suave);
+  border: 1px solid var(--cor-destaque);
+  color: var(--cor-destaque);
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 0.9rem;
@@ -134,9 +155,9 @@ function sair() {
 
 <style>
 .menu-usuario {
-  background: var(--color-ink-soft);
-  border: 1px solid var(--color-ink-line);
-  color: var(--color-paper);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  color: var(--cor-texto);
   min-width: 220px;
 }
 </style>

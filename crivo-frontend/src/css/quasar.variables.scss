@@ -1,15 +1,16 @@
-// Paleta "carimbo de verificação" — ver src/css/app.scss para os tokens completos
-$primary: #f2a33d; // sinal / âmbar — cor de ação e destaque
-$secondary: #8a8fa3; // ardósia neutra
-$accent: #4c7ea8; // azul frio de apoio
+// Cores-base do Quasar. As que mudam com o tema claro/escuro (como a "primary")
+// são sobrescritas por variáveis CSS em src/css/app.scss.
+$primary: #003d7c; // azul UFN — cor de ação e destaque
+$secondary: #55657a; // ardósia neutra
+$accent: #1976d2; // azul vivo de apoio (links do site da UFN)
 
 $dark: #14171f;
 $dark-page: #14171f;
 
-$positive: #3fa66e; // veredito verdadeiro
-$negative: #d8544b; // veredito falso
-$info: #4c7ea8;
-$warning: #f2a33d;
+$positive: #1e7a46; // veredito verdadeiro
+$negative: #c0392b; // veredito falso
+$info: #1976d2;
+$warning: #e0a32e;
 
 $body-font-size: 16px;
 $typography-font-family: 'IBM Plex Sans', sans-serif;

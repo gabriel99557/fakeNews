@@ -11,7 +11,7 @@
 
       <div class="col-12 col-sm" style="min-width: 0">
         <div class="eyebrow q-mb-xs">{{ tituloVeredito }}</div>
-        <p class="q-mb-md text-body1" style="color: var(--color-paper); max-width: 56ch">
+        <p class="q-mb-md text-body1" style="color: var(--cor-texto); max-width: 56ch">
           {{ resultado.justificativa }}
         </p>
 
@@ -24,7 +24,7 @@
           </ul>
         </div>
 
-        <div class="row items-center q-mt-md font-mono text-caption" style="color: var(--color-paper-dim); gap: 16px">
+        <div class="row items-center q-mt-md font-mono text-caption" style="color: var(--cor-texto-suave); gap: 16px">
           <span>{{ dataFormatada }}</span>
           <span>·</span>
           <span>{{ resultado.origem === 'url' ? 'origem: URL' : 'origem: texto colado' }}</span>
@@ -74,8 +74,8 @@ const dataFormatada = computed(() => {
 
 <style scoped>
 .resultado-card {
-  background: var(--color-ink-soft);
-  border: 1px solid var(--color-ink-line);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
   border-radius: 4px;
   animation: fade-up 320ms ease both;
 }
@@ -98,9 +98,9 @@ const dataFormatada = computed(() => {
   font-family: var(--font-mono);
   font-size: 0.78rem;
   line-height: 1.5;
-  color: var(--color-paper);
-  background: var(--color-ink);
-  border: 1px solid var(--color-ink-line);
+  color: var(--cor-texto);
+  background: var(--cor-fundo);
+  border: 1px solid var(--cor-borda);
   border-left-width: 3px;
   border-radius: 2px;
   padding: 7px 10px;
@@ -109,7 +109,7 @@ const dataFormatada = computed(() => {
   overflow-wrap: anywhere;
 }
 
-.indicador--true { border-left-color: var(--color-true); }
-.indicador--false { border-left-color: var(--color-false); }
-.indicador--unclear { border-left-color: var(--color-unclear); }
+.indicador--true { border-left-color: var(--cor-verdadeiro); }
+.indicador--false { border-left-color: var(--cor-falso); }
+.indicador--unclear { border-left-color: var(--cor-inconclusivo); }
 </style>

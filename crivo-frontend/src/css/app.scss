@@ -2,25 +2,62 @@
 // TOKENS — identidade visual do Crivo
 //
 // Conceito: "carimbo de verificação". O produto autentica conteúdo,
-// então a linguagem visual remete a selos, protocolos e dossiês —
-// não ao clichê genérico de "produto de IA".
+// então a linguagem visual remete a selos, protocolos e dossiês.
+//
+// Dois temas, escolhidos pelo atributo data-theme no <html> (ver services/tema.js):
+//   - claro (padrão): branco e azul da Universidade Franciscana (UFN);
+//   - escuro: grafite com destaque em azul.
 // ============================================================
-:root {
-  // Cor
-  --color-ink: #14171f; // fundo — grafite-marinho, não preto puro
-  --color-ink-soft: #1c2029; // superfícies elevadas sobre o fundo
-  --color-ink-line: #2a2f3b; // divisores/bordas sutis
-  --color-paper: #eceff3; // texto principal — branco-gelo frio
-  --color-paper-dim: #9aa2b3; // texto secundário
-  --color-signal: #f2a33d; // âmbar — ação, foco, "em análise"
-  --color-signal-soft: rgba(242, 163, 61, 0.14);
-  --color-true: #3fa66e;
-  --color-true-soft: rgba(63, 166, 110, 0.14);
-  --color-false: #d8544b;
-  --color-false-soft: rgba(216, 84, 75, 0.14);
-  --color-unclear: #8a8fa3;
-  --color-unclear-soft: rgba(138, 143, 163, 0.16);
 
+// Tema claro (padrão) — cores institucionais da UFN
+:root,
+:root[data-theme='light'] {
+  --cor-fundo: #ffffff;
+  --cor-superficie: #f4f7fb; // cartões e painéis sobre o fundo branco
+  --cor-superficie-hover: #e9eff6;
+  --cor-borda: #dfe5ec;
+  --cor-texto: #14233a; // azul-marinho quase preto, legível sobre branco
+  --cor-texto-suave: #55657a;
+  --cor-destaque: #003d7c; // azul UFN (logotipo e menus do site institucional)
+  --cor-destaque-suave: rgba(0, 61, 124, 0.08);
+  --cor-neutro: #e4eaf1; // botões não selecionados dos filtros
+  --cor-verdadeiro: #1e7a46;
+  --cor-verdadeiro-suave: rgba(30, 122, 70, 0.1);
+  --cor-falso: #c0392b;
+  --cor-falso-suave: rgba(192, 57, 43, 0.1);
+  --cor-inconclusivo: #5f6b7a;
+  --cor-inconclusivo-suave: rgba(95, 107, 122, 0.12);
+
+  // Cor "primary" do Quasar (botões e campos em foco)
+  --q-primary: #003d7c;
+
+  color-scheme: light;
+}
+
+// Tema escuro
+:root[data-theme='dark'] {
+  --cor-fundo: #14171f; // grafite-marinho, não preto puro
+  --cor-superficie: #1c2029;
+  --cor-superficie-hover: #232835;
+  --cor-borda: #2a2f3b;
+  --cor-texto: #eceff3; // branco-gelo frio
+  --cor-texto-suave: #9aa2b3;
+  --cor-destaque: #7fb2f0; // azul claro: contraste suficiente sobre o fundo escuro
+  --cor-destaque-suave: rgba(127, 178, 240, 0.14);
+  --cor-neutro: #2a2f3b;
+  --cor-verdadeiro: #3fa66e;
+  --cor-verdadeiro-suave: rgba(63, 166, 110, 0.14);
+  --cor-falso: #e0645a;
+  --cor-falso-suave: rgba(216, 84, 75, 0.14);
+  --cor-inconclusivo: #8a8fa3;
+  --cor-inconclusivo-suave: rgba(138, 143, 163, 0.16);
+
+  --q-primary: #2f6fd6;
+
+  color-scheme: dark;
+}
+
+:root {
   // Tipografia
   --font-display: 'Fraunces', ui-serif, serif;
   --font-body: 'IBM Plex Sans', ui-sans-serif, sans-serif;
@@ -33,12 +70,12 @@
 
 html, body, #app {
   min-height: 100%;
-  background: var(--color-ink);
+  background: var(--cor-fundo);
 }
 
 body {
   font-family: var(--font-body);
-  color: var(--color-paper);
+  color: var(--cor-texto);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -51,10 +88,22 @@ body {
   letter-spacing: 0.02em;
 }
 
+// Cores próprias para as props color/text-color do Quasar que precisam seguir o tema
+// (ex.: <q-btn-toggle color="neutro" text-color="neutro-texto">)
+.bg-neutro {
+  background: var(--cor-neutro) !important;
+}
+.text-neutro-texto {
+  color: var(--cor-texto-suave) !important;
+}
+.text-destaque {
+  color: var(--cor-destaque) !important;
+}
+
 // Textura de fundo sutil: pontilhado fino, como papel de segurança
 .bg-crivo {
-  background-color: var(--color-ink);
-  background-image: radial-gradient(var(--color-ink-line) 1px, transparent 1px);
+  background-color: var(--cor-fundo);
+  background-image: radial-gradient(var(--cor-borda) 1px, transparent 1px);
   background-size: 22px 22px;
 }
 
@@ -63,12 +112,12 @@ body {
   font-size: 0.72rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--color-signal);
+  color: var(--cor-destaque);
 }
 
 .divider-line {
   height: 1px;
-  background: var(--color-ink-line);
+  background: var(--cor-borda);
   border: none;
 }
 
@@ -95,7 +144,7 @@ body {
 .hero-title {
   font-size: 2.6rem;
   line-height: 1.08;
-  color: var(--color-paper);
+  color: var(--cor-texto);
   font-weight: 600;
 }
 
@@ -139,9 +188,9 @@ body {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-ink);
+  background: var(--cor-fundo);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-ink-line);
+  background: var(--cor-borda);
   border-radius: 6px;
 }
