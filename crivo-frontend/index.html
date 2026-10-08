@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CrivoNews — Verificação de notícias com IA</title>
   <meta name="description" content="Cole um texto ou uma URL de notícia e receba um veredito de confiabilidade gerado por IA, com indicadores linguísticos explicados." />
+  <script>
+    // Aplica o tema salvo antes de a página aparecer (padrão: claro). Ver src/services/tema.js
+    try {
+      document.documentElement.setAttribute('data-theme', localStorage.getItem('crivonews.tema') === 'dark' ? 'dark' : 'light')
+    } catch (e) {
+      document.documentElement.setAttribute('data-theme', 'light')
+    }
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

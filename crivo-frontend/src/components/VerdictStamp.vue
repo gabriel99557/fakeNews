@@ -91,7 +91,7 @@ const origemLabel = computed(() => (props.origem === 'url' ? 'FONTE: URL' : 'FON
   opacity: 0.85;
 }
 
-.stamp--true { color: var(--color-true); }
-.stamp--false { color: var(--color-false); }
-.stamp--unclear { color: var(--color-unclear); }
+.stamp--true { color: var(--cor-verdadeiro); }
+.stamp--false { color: var(--cor-falso); }
+.stamp--unclear { color: var(--cor-inconclusivo); }
 </style>

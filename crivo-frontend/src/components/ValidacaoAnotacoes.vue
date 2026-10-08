@@ -5,7 +5,7 @@
 
     <div v-if="editandoValidacao || !analise.avaliacaoUsuario">
       <template v-if="!discordando">
-        <p class="q-mb-sm text-body2" style="color: var(--color-paper)">
+        <p class="q-mb-sm text-body2" style="color: var(--cor-texto)">
           Você concorda com o veredito da IA?
         </p>
         <div class="row" style="gap: 8px">
@@ -36,14 +36,14 @@
             no-caps
             label="Cancelar"
             class="font-mono btn-validacao"
-            style="color: var(--color-paper-dim)"
+            style="color: var(--cor-texto-suave)"
             @click="editandoValidacao = false"
           />
         </div>
       </template>
 
       <template v-else>
-        <p class="q-mb-sm text-body2" style="color: var(--color-paper)">
+        <p class="q-mb-sm text-body2" style="color: var(--cor-texto)">
           Na sua avaliação, qual seria o veredito correto?
         </p>
         <div class="row items-center" style="gap: 8px">
@@ -51,18 +51,16 @@
             v-model="vereditoEscolhido"
             no-caps
             unelevated
-            toggle-color="orange-6"
-            toggle-text-color="dark"
-            color="grey-9"
-            text-color="grey-4"
+            toggle-color="primary"
+            color="neutro"
+            text-color="neutro-texto"
             class="font-mono btn-validacao"
             :options="opcoesDiscordancia"
           />
           <q-btn
             unelevated
             no-caps
-            color="orange-6"
-            text-color="dark"
+            color="primary"
             label="Salvar"
             class="font-mono btn-validacao"
             :disable="!vereditoEscolhido"
@@ -74,7 +72,7 @@
             no-caps
             label="Cancelar"
             class="font-mono btn-validacao"
-            style="color: var(--color-paper-dim)"
+            style="color: var(--cor-texto-suave)"
             @click="cancelarDiscordancia"
           />
         </div>
@@ -105,7 +103,7 @@
 
     <!-- Anotações -->
     <div class="eyebrow q-mb-sm">
-      Suas anotações <span v-if="notas.length" style="color: var(--color-paper-dim)">({{ notas.length }})</span>
+      Suas anotações <span v-if="notas.length" style="color: var(--cor-texto-suave)">({{ notas.length }})</span>
     </div>
 
     <ul v-if="notas.length" class="lista-notas q-mb-md">
@@ -136,7 +134,7 @@
         </div>
       </li>
     </ul>
-    <p v-else class="text-body2 q-mb-md" style="color: var(--color-paper-dim)">
+    <p v-else class="text-body2 q-mb-md" style="color: var(--cor-texto-suave)">
       Registre apontamentos, contrapontos ou evidências sobre esta notícia para consultar depois.
     </p>
 
@@ -145,9 +143,8 @@
         v-model="textoNota"
         type="textarea"
         autogrow
-        dark
         filled
-        color="orange-6"
+        color="primary"
         placeholder="Escreva uma anotação…"
         maxlength="2000"
         counter
@@ -155,10 +152,9 @@
       />
       <q-input
         v-model="linkNota"
-        dark
         filled
         dense
-        color="orange-6"
+        color="primary"
         placeholder="Link de evidência (opcional) — ex.: uma checagem publicada"
         maxlength="2048"
         :disable="salvandoNota"
@@ -172,8 +168,7 @@
           type="submit"
           unelevated
           no-caps
-          color="orange-6"
-          text-color="dark"
+          color="primary"
           icon="add"
           label="Adicionar anotação"
           class="font-mono btn-validacao"
@@ -311,9 +306,9 @@ function formatarData(iso) {
 
 <style scoped>
 .painel-pessoal {
-  background: var(--color-ink-soft);
-  border: 1px solid var(--color-ink-line);
-  border-top: 2px solid var(--color-signal);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-top: 2px solid var(--cor-destaque);
   border-radius: 4px;
 }
 
@@ -332,20 +327,20 @@ function formatarData(iso) {
 }
 
 .selo--concordo {
-  color: var(--color-true);
-  background: var(--color-true-soft);
-  border-color: var(--color-true);
+  color: var(--cor-verdadeiro);
+  background: var(--cor-verdadeiro-suave);
+  border-color: var(--cor-verdadeiro);
 }
 
 .selo--discordo {
-  color: var(--color-false);
-  background: var(--color-false-soft);
-  border-color: var(--color-false);
+  color: var(--cor-falso);
+  background: var(--cor-falso-suave);
+  border-color: var(--cor-falso);
 }
 
 .link-acao {
   font-size: 0.74rem;
-  color: var(--color-paper-dim);
+  color: var(--cor-texto-suave);
 }
 
 .lista-notas {
@@ -358,15 +353,15 @@ function formatarData(iso) {
 }
 
 .nota {
-  background: var(--color-ink);
-  border: 1px solid var(--color-ink-line);
-  border-left: 3px solid var(--color-signal);
+  background: var(--cor-fundo);
+  border: 1px solid var(--cor-borda);
+  border-left: 3px solid var(--cor-destaque);
   border-radius: 2px;
   padding: 10px 12px 6px;
 }
 
 .nota-texto {
-  color: var(--color-paper);
+  color: var(--cor-texto);
   font-size: 0.92rem;
   line-height: 1.5;
   white-space: pre-wrap;
@@ -379,7 +374,7 @@ function formatarData(iso) {
   gap: 4px;
   margin-top: 6px;
   font-size: 0.74rem;
-  color: var(--color-signal);
+  color: var(--cor-destaque);
   text-decoration: none;
   overflow-wrap: anywhere;
   word-break: break-all;
@@ -391,14 +386,14 @@ function formatarData(iso) {
 
 .nota-data {
   font-size: 0.7rem;
-  color: var(--color-paper-dim);
+  color: var(--cor-texto-suave);
 }
 
 .nota-excluir {
-  color: var(--color-paper-dim);
+  color: var(--cor-texto-suave);
 }
 
 .nota-excluir:hover {
-  color: var(--color-false);
+  color: var(--cor-falso);
 }
 </style>

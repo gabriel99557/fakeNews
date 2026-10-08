@@ -17,9 +17,8 @@
       autogrow
       :rows="tipoDetectado === 'url' ? 1 : 5"
       placeholder="Cole aqui o texto de uma notícia, ou o link (URL) de uma matéria publicada..."
-      dark
       filled
-      color="orange-6"
+      color="primary"
       :rules="[val => (val && val.trim().length > 0) || 'Cole um texto ou uma URL para continuar']"
       :disable="carregando"
       class="font-body"
@@ -34,9 +33,9 @@
           spread
           unelevated
           :disable="carregando"
-          toggle-color="orange-6"
-          color="grey-9"
-          text-color="grey-4"
+          toggle-color="primary"
+          color="neutro"
+          text-color="neutro-texto"
           class="font-mono"
           style="font-size: 0.78rem"
           :options="[
@@ -51,8 +50,7 @@
         :loading="carregando"
         :disable="!conteudo || !conteudo.trim()"
         unelevated
-        color="orange-6"
-        text-color="dark"
+        color="primary"
         class="font-mono text-weight-medium q-px-lg"
         label="Analisar"
         icon-right="fact_check"

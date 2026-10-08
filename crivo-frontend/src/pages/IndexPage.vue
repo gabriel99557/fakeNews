@@ -12,7 +12,7 @@
         <h1 class="font-display q-mt-none q-mb-sm hero-title">
           Passe a notícia<br />pelo crivo.
         </h1>
-        <p class="text-body1 q-mb-xl" style="max-width: 52ch; color: var(--color-paper-dim)">
+        <p class="text-body1 q-mb-xl" style="max-width: 52ch; color: var(--cor-texto-suave)">
           Cole um texto ou o link de uma matéria. Um modelo de linguagem ajustado para
           detecção de desinformação analisa o conteúdo e devolve um veredito com a
           justificativa por trás dele.
@@ -43,7 +43,7 @@
         />
 
         <div v-else-if="!estaLogado" class="convite-login q-mt-md q-pa-md row items-center justify-between">
-          <span class="text-body2" style="color: var(--color-paper-dim); max-width: 60ch">
+          <span class="text-body2" style="color: var(--cor-texto-suave); max-width: 60ch">
             Entre ou crie uma conta para salvar suas próximas análises no histórico,
             validar os vereditos da IA e guardar suas anotações.
           </span>
@@ -52,7 +52,7 @@
               :to="{ name: 'entrar', query: { modo: 'cadastro' } }"
               outline
               no-caps
-              color="orange-6"
+              color="primary"
               class="font-mono"
               style="font-size: 0.78rem"
               label="Criar conta"
@@ -61,8 +61,7 @@
               :to="{ name: 'entrar' }"
               unelevated
               no-caps
-              color="orange-6"
-              text-color="dark"
+              color="primary"
               class="font-mono"
               style="font-size: 0.78rem"
               label="Entrar"
@@ -77,20 +76,20 @@
         <div class="eyebrow q-mb-md">Como funciona</div>
         <div class="row q-col-gutter-lg">
           <div class="col-12 col-sm-4" v-for="passo in passos" :key="passo.numero">
-            <div class="font-mono" style="color: var(--color-signal); font-size: 0.8rem">
+            <div class="font-mono" style="color: var(--cor-destaque); font-size: 0.8rem">
               {{ passo.numero }}
             </div>
-            <div class="font-display text-weight-600 q-mt-xs q-mb-xs" style="color: var(--color-paper)">
+            <div class="font-display text-weight-600 q-mt-xs q-mb-xs" style="color: var(--cor-texto)">
               {{ passo.titulo }}
             </div>
-            <div class="text-body2" style="color: var(--color-paper-dim)">
+            <div class="text-body2" style="color: var(--cor-texto-suave)">
               {{ passo.descricao }}
             </div>
           </div>
         </div>
       </section>
 
-      <footer class="q-py-lg font-mono text-caption" style="color: var(--color-paper-dim)">
+      <footer class="q-py-lg font-mono text-caption" style="color: var(--cor-texto-suave)">
         <hr class="divider-line q-mb-md" />
         Projeto acadêmico — Universidade Franciscana (UFN). Vereditos gerados por IA são
         probabilísticos e não substituem a checagem por especialistas.
@@ -139,13 +138,13 @@ async function executarAnalise({ conteudo, modelo }) {
 <style scoped>
 .convite-login {
   gap: 12px;
-  border: 1px dashed var(--color-ink-line);
+  border: 1px dashed var(--cor-borda);
   border-radius: 4px;
 }
 
 .console-panel {
-  background: var(--color-ink-soft);
-  border: 1px solid var(--color-ink-line);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
   border-radius: 4px;
 }
 </style>
