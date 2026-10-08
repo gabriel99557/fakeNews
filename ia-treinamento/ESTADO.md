@@ -68,10 +68,16 @@ Arquivos gerados, em `Meu Drive/crivonews`:
 
 ## Documentação no Google Drive
 
-Pasta `crivonews` (conta matheuspichler94, compartilhada com gabriel.pinheirogsp2001):
+Conta **gabriel.pinheirogsp2001**, pasta `Tfg Gabriel Pinheiro/CrivoNews – TFG 2`:
 
-- [CrivoNews – Treinamento do modelo local](https://docs.google.com/document/d/1PPi9e5tWMODvLcckj0bW6G5IpgLxsehdoTw-l6-x9G8/edit)
-- [CrivoNews – Capítulo de Resultados](https://docs.google.com/document/d/1y2auPTxd6he6JCFHYpUBL8gx0gLy0cQU8XbAkEaWtUM/edit)
+- [CrivoNews – Treinamento do modelo local](https://docs.google.com/document/d/1zcPB5o8qZ3Jn8EnkOq_e9Q_Rw4A2dvh7TF3ZRGAXHNY/edit)
+- [CrivoNews – Capítulo de Resultados](https://docs.google.com/document/d/1eShk2PM_AJQlJhgoBEVmQU3HjcXBuPWHsAD8UL_AaDg/edit)
+- `4_treinar_lora.ipynb` e a subpasta `Artefatos do treinamento` (historico_treino.csv, adaptador `crivo-lora/`,
+  base, anotações, treino e validação)
+
+O modelo `crivo.Q4_K_M.gguf` (4,9 GB) não foi copiado: está em `C:\modelos\crivo\` e na pasta `crivonews` da conta
+gabrielmatheus9845 (compartilhada com gabriel.pinheirogsp2001). As versões originais dos documentos continuam na
+pasta `crivonews` da conta matheuspichler94, como backup.
 
 ## Limite da Groq (importante)
 
