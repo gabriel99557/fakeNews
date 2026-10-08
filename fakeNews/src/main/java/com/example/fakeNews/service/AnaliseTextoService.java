@@ -53,15 +53,15 @@ public class AnaliseTextoService {
 
     /** Pipeline usando o modelo em nuvem (Groq/OpenAI-compatible via Spring AI). */
     public AnaliseResponse analisar(String conteudo) {
-        return executarPipeline(conteudo, this::chamarIaNuvem);
+        return executarPipeline(conteudo, "nuvem", this::chamarIaNuvem);
     }
 
     /** Mesmo pipeline, usando o modelo local fine-tuned (Llama 3 + LoRA via Ollama). */
     public AnaliseResponse analisarLocal(String conteudo) {
-        return executarPipeline(conteudo, this::chamarIaLocal);
+        return executarPipeline(conteudo, "local", this::chamarIaLocal);
     }
 
-    private AnaliseResponse executarPipeline(String conteudo, Function<String, String> chamadaIa) {
+    private AnaliseResponse executarPipeline(String conteudo, String modelo, Function<String, String> chamadaIa) {
         String origem;
         String textoParaAnalise;
 
@@ -81,7 +81,7 @@ public class AnaliseTextoService {
 
         //  dispara a persistência em background
         // sem bloquear a resposta que já será devolvida ao usuário.
-        historicoService.salvarAnaliseAsync(conteudo, origem, resultado);
+        historicoService.salvarAnaliseAsync(conteudo, origem, modelo, resultado);
 
         return resultado;
     }

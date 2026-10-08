@@ -24,8 +24,11 @@ Consome a API Spring Boot desenvolvida em paralelo (`fakeNews-atualizado.zip`).
 
 ## Estrutura
 
-- `src/pages/IndexPage.vue` — página única com hero, formulário e resultado
+- `src/router/index.js` — rotas `/` (análise) e `/historico`
+- `src/pages/IndexPage.vue` — hero, formulário e resultado
+- `src/pages/HistoricoPage.vue` — histórico paginado com filtro por veredito (RF03)
+- `src/components/AppHeader.vue` — cabeçalho com navegação entre as páginas
 - `src/components/AnaliseForm.vue` — input de texto/URL + seleção de modelo (nuvem/local)
 - `src/components/ResultadoAnalise.vue` — card de resultado
 - `src/components/VerdictStamp.vue` — selo circular do veredito (elemento visual de assinatura)
-- `src/services/api.js` — cliente Axios para os endpoints `/api/analise/texto` e `/api/analise/texto/local`
+- `src/services/api.js` — cliente Axios para os endpoints de análise e de histórico

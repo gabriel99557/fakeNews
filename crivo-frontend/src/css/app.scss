@@ -72,6 +72,39 @@ body {
   border: none;
 }
 
+// Contêiner central compartilhado pelas páginas
+.page-shell {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 12px 24px 40px;
+}
+
+@media (min-width: 1440px) {
+  .page-shell {
+    max-width: 1120px;
+  }
+}
+
+@media (max-width: 599px) {
+  .page-shell {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+.hero-title {
+  font-size: 2.6rem;
+  line-height: 1.08;
+  color: var(--color-paper);
+  font-weight: 600;
+}
+
+@media (max-width: 599px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+}
+
 // ============================================================
 // Selo de veredito — elemento de assinatura da interface
 // ============================================================

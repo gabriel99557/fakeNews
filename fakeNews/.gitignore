@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Segredos locais (chave da Groq etc.) ###
+/config/
+/application.properties

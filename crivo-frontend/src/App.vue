@@ -1,11 +1,7 @@
 <template>
   <q-layout view="hHh lpR fFf">
     <q-page-container>
-      <index-page />
+      <router-view />
     </q-page-container>
   </q-layout>
 </template>
-
-<script setup>
-import IndexPage from './pages/IndexPage.vue'
-</script>

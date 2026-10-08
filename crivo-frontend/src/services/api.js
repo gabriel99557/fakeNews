@@ -20,6 +20,17 @@ export function analisarConteudo(conteudo, modelo = 'nuvem') {
 }
 
 /**
+ * Lista o histórico de análises (RF03), das mais recentes para as mais antigas.
+ * @param {{ pagina?: number, tamanho?: number, veredito?: string|null }} filtros
+ * @returns {Promise<import('axios').AxiosResponse>} data = { itens, pagina, tamanho, totalItens, totalPaginas }
+ */
+export function listarHistorico({ pagina = 0, tamanho = 10, veredito = null } = {}) {
+  const params = { pagina, tamanho }
+  if (veredito) params.veredito = veredito
+  return api.get('/historico', { params })
+}
+
+/**
  * Extrai uma mensagem de erro amigável de uma resposta de erro da API,
  * que segue o formato ErroResponse { status, mensagem, timestamp }.
  */
