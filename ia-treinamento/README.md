@@ -120,6 +120,8 @@ A comparação **base × treinado** é o que mostra o ganho do fine-tuning.
 |---|---|---|
 | `comum.py` | sim | Prompt lido do Java, higienização, parser igual ao backend |
 | `1_` a `5_` | sim | Os passos acima |
+| `6_analisar_resultados.py` | sim | IC 95%, McNemar, acurácia por categoria, probabilidades e latência |
 | `Modelfile` | sim | Importação no Ollama |
 | `inconclusivos_manual.jsonl` | sim | Exemplos INCONCLUSIVO escritos à mão |
-| `dados/`, `resultados/`, `*.gguf` | não | Gerados pelos scripts |
+| `resultados/*.jsonl`, `resultados/*.md` | sim | Respostas de cada modelo e tabelas do capítulo de Resultados |
+| `dados/` (exceto base e anotações), `*.gguf` | não | Gerados pelos scripts |

@@ -26,12 +26,28 @@ from comum import (ARQUIVO_BASE, GROQ_URL, OLLAMA_URL, PASTA_RESULTADOS, PROMPT_
                    prompt_local)
 
 
-def chamar_ollama(modelo: str, texto: str) -> str:
-    corpo = {"model": modelo, "prompt": prompt_local(texto), "stream": False}
+def _gerar_ollama(corpo: dict) -> str:
     req = urllib.request.Request(OLLAMA_URL, data=json.dumps(corpo).encode("utf-8"),
                                  headers={"Content-Type": "application/json"}, method="POST")
-    with urllib.request.urlopen(req, timeout=600) as resp:
+    with urllib.request.urlopen(req, timeout=900) as resp:
         return json.load(resp).get("response") or ""
+
+
+def chamar_ollama(modelo: str, texto: str) -> tuple:
+    """Retorna (resposta, usou_cpu).
+
+    Na máquina de avaliação (GPU AMD via Vulkan), o Ollama às vezes degenera a geração em "@@@@..."
+    e aborta com HTTP 500 ("token repeat limit reached"). A mesma notícia processada só na CPU sai
+    normal, então é um defeito do backend de GPU, não do modelo: nesse caso a notícia é refeita na CPU.
+    """
+    corpo = {"model": modelo, "prompt": prompt_local(texto), "stream": False}
+    try:
+        return _gerar_ollama(corpo), False
+    except urllib.error.HTTPError as e:
+        if e.code != 500:
+            raise
+        print(f"    GPU falhou ({e.read().decode('utf-8', 'replace')[:80]}); refazendo na CPU...")
+    return _gerar_ollama({**corpo, "options": {"num_gpu": 0}}), True
 
 
 def chamar_groq(modelo: str, texto: str, chave: str) -> str:
@@ -67,8 +83,12 @@ def avaliar_modelo(alvo: str, itens: list) -> list:
 
     for n, item in enumerate(pendentes, 1):
         inicio = time.perf_counter()
+        usou_cpu = False
         try:
-            bruta = chamar_ollama(modelo, item["texto"]) if tipo == "ollama" else chamar_groq(modelo, item["texto"], chave)
+            if tipo == "ollama":
+                bruta, usou_cpu = chamar_ollama(modelo, item["texto"])
+            else:
+                bruta = chamar_groq(modelo, item["texto"], chave)
             erro = None
         except urllib.error.URLError as e:
             if tipo == "ollama" and getattr(e, "code", None) == 404:
@@ -85,7 +105,8 @@ def avaliar_modelo(alvo: str, itens: list) -> list:
             veredito, json_ok = None, False
 
         r = {"id": item["id"], "esperado": VEREDITO_POR_CLASSE[item["classe"]], "previsto": veredito,
-             "json_valido": json_ok, "latencia_s": round(latencia, 2), "resposta": bruta, "erro": erro}
+             "json_valido": json_ok, "latencia_s": round(latencia, 2), "resposta": bruta, "erro": erro,
+             "refeito_na_cpu": usou_cpu}
         anexar_jsonl(arquivo, r)
         resultados[item["id"]] = r
         if n % 10 == 0 or n == len(pendentes):

@@ -1,4 +1,4 @@
-# Estado do treinamento — atualizado em 07/10/2026
+# Estado do treinamento — atualizado em 08/10/2026
 
 Anotações para continuar o trabalho em outro computador. O passo a passo completo está no [README](README.md).
 
@@ -11,7 +11,7 @@ Anotações para continuar o trabalho em outro computador. O passo a passo compl
 | 3. Montar dataset | ✅ `treino.jsonl` 1.099 exemplos (539 FALSO / 539 VERDADEIRO / 21 INCONCLUSIVO) e `validacao.jsonl` 129 (61 / 61 / 7) |
 | 4. Treinar no Colab | ✅ Feito em 06–07/10 (ver "Resultado do treino") |
 | 5. Ollama | ✅ Importado em 07/10 como `meu-llama-tcc` (modelo antigo removido) |
-| 6. Avaliação | ⏳ **Próximo passo** |
+| 6. Avaliação | ✅ Feita em 07–08/10 (ver "Resultado da avaliação") |
 
 Histórico do passo 2: dia 3 (05/10) +316 anotações até o limite diário; 06/10 +102 para completar as 1.200.
 
@@ -51,20 +51,27 @@ Arquivos gerados, em `Meu Drive/crivonews`:
 - Pelo site (Llama 3 local), o boato da poupança saiu FALSO, 82%. O frontend passou a esperar até 180 s
   pelo modelo local (antes, 30 s, o que estourava). Nesta máquina parte do modelo roda na CPU.
 
-## Próximo passo: avaliação (capítulo de resultados)
+## Resultado da avaliação (07–08/10/2026)
 
-```bash
-ollama pull llama3.1:8b
-```
+200 notícias do teste (100 pares), cada modelo chamado como o backend chama. Tabelas completas em
+`resultados/resumo.md` e `resultados/analise.md`.
 
-```bash
-python 5_avaliar.py --modelo ollama:llama3.1:8b --modelo ollama:meu-llama-tcc --modelo groq:openai/gpt-oss-120b
-```
+| Modelo | Acurácia (IC 95%) | F1 macro | Inconclusivo | Latência mediana |
+|---|---|---|---|---|
+| llama3.1:8b (original) | 54,0% (47,1–60,8%) | 0,597 | 18,5% | 41,6 s |
+| **meu-llama-tcc (treinado)** | **88,5% (83,3–92,2%)** | **0,887** | 0% | 35,9 s |
+| groq:openai/gpt-oss-120b | 54,5% (47,6–61,3%) | 0,614 | 24,5% | 6,7 s |
 
-- São 200 notícias do teste por modelo (`--limite 0` para as 718). Com ~20 s por notícia no modelo local, conte
-  ~1h10 para cada modelo do Ollama. A parte da Groq consome a cota diária (~200 notícias cabem nela).
-- Observe a **% de INCONCLUSIVO** no resumo: o teste não tem casos inconclusivos, então previsões
-  INCONCLUSIVO ali indicam atalho de estilo.
+- McNemar: treinado × original p < 0,0001 (73 contra 4); original × Groq p = 1,0 (empate).
+- A GPU AMD às vezes degenera a geração em "@@@@" (HTTP 500 "token repeat limit reached"); o `5_avaliar.py`
+  refaz essas notícias só na CPU (2 casos no total).
+
+## Documentação no Google Drive
+
+Pasta `crivonews` (conta matheuspichler94, compartilhada com gabriel.pinheirogsp2001):
+
+- [CrivoNews – Treinamento do modelo local](https://docs.google.com/document/d/1PPi9e5tWMODvLcckj0bW6G5IpgLxsehdoTw-l6-x9G8/edit)
+- [CrivoNews – Capítulo de Resultados](https://docs.google.com/document/d/1y2auPTxd6he6JCFHYpUBL8gx0gLy0cQU8XbAkEaWtUM/edit)
 
 ## Limite da Groq (importante)
 
