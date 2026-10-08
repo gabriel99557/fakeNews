@@ -9,15 +9,16 @@
         <div class="eyebrow q-mb-sm">Histórico de consultas</div>
         <h1 class="font-display q-mt-none q-mb-sm hero-title">Análises anteriores.</h1>
         <p class="text-body1 q-mb-none" style="max-width: 52ch; color: var(--color-paper-dim)">
-          Todas as verificações feitas na plataforma, das mais recentes para as mais antigas.
-          Selecione uma análise para rever o veredito completo.
+          Suas verificações, das mais recentes para as mais antigas. Abra uma análise para
+          rever o veredito, registrar se você concorda com a IA e guardar suas anotações.
         </p>
       </section>
 
       <!-- Filtros -->
       <section class="row items-end justify-between q-mb-md" style="gap: 12px">
+        <div class="row items-end" style="gap: 16px">
         <div>
-          <div class="eyebrow q-mb-xs">Filtrar por veredito</div>
+          <div class="eyebrow q-mb-xs">Veredito da IA</div>
           <q-btn-toggle
             v-model="filtroVeredito"
             no-caps
@@ -29,6 +30,21 @@
             class="font-mono filtro-toggle"
             :options="opcoesFiltro"
           />
+        </div>
+        <div>
+          <div class="eyebrow q-mb-xs">Sua avaliação</div>
+          <q-btn-toggle
+            v-model="filtroAvaliacao"
+            no-caps
+            unelevated
+            toggle-color="orange-6"
+            toggle-text-color="dark"
+            color="grey-9"
+            text-color="grey-4"
+            class="font-mono filtro-toggle"
+            :options="opcoesAvaliacao"
+          />
+        </div>
         </div>
         <span v-if="pagina" class="font-mono text-caption" style="color: var(--color-paper-dim)">
           {{ pagina.totalItens }} {{ pagina.totalItens === 1 ? 'análise' : 'análises' }}
@@ -53,13 +69,13 @@
       <div v-else-if="pagina && pagina.itens.length === 0" class="vazio q-pa-xl text-center">
         <q-icon name="history" size="36px" style="color: var(--color-paper-dim)" />
         <div class="font-display q-mt-sm q-mb-xs" style="font-size: 1.15rem; color: var(--color-paper)">
-          {{ filtroVeredito ? 'Nenhuma análise com esse veredito.' : 'Nenhuma análise registrada ainda.' }}
+          {{ temFiltro ? 'Nenhuma análise com esses filtros.' : 'Nenhuma análise registrada ainda.' }}
         </div>
         <div class="text-body2 q-mb-md" style="color: var(--color-paper-dim)">
-          As verificações aparecem aqui assim que são concluídas.
+          {{ temFiltro ? 'Tente remover algum filtro.' : 'As verificações feitas com você logado aparecem aqui.' }}
         </div>
         <q-btn
-          v-if="!filtroVeredito"
+          v-if="!temFiltro"
           to="/"
           unelevated
           no-caps
@@ -93,6 +109,16 @@
                 <span>{{ item.origem === 'url' ? 'URL' : 'texto' }}</span>
                 <span>·</span>
                 <span>{{ item.modelo === 'local' ? 'Llama 3 local' : 'nuvem' }}</span>
+                <span
+                  v-if="item.avaliacaoUsuario"
+                  class="item-selo"
+                  :class="item.avaliacaoUsuario === 'CONCORDO' ? 'item-selo--concordo' : 'item-selo--discordo'"
+                >
+                  {{ item.avaliacaoUsuario === 'CONCORDO' ? 'você concorda' : `você: ${item.vereditoUsuario}` }}
+                </span>
+                <span v-if="item.notas && item.notas.length" class="item-selo item-selo--notas">
+                  <q-icon name="sticky_note_2" size="12px" /> {{ item.notas.length }}
+                </span>
               </div>
             </div>
 
@@ -106,6 +132,7 @@
 
           <div v-if="selecionadoId === item.id" class="q-mt-sm q-mb-md">
             <resultado-analise :resultado="item" />
+            <validacao-anotacoes :analise="item" class="q-mt-sm" @atualizado="atualizarItem" />
           </div>
         </div>
       </div>
@@ -130,9 +157,10 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import AppHeader from '../components/AppHeader.vue'
 import ResultadoAnalise from '../components/ResultadoAnalise.vue'
+import ValidacaoAnotacoes from '../components/ValidacaoAnotacoes.vue'
 import { listarHistorico, extrairMensagemErro } from '../services/api.js'
 
 const TAMANHO_PAGINA = 10
@@ -144,9 +172,17 @@ const opcoesFiltro = [
   { label: 'Inconclusivo', value: 'INCONCLUSIVO' }
 ]
 
+const opcoesAvaliacao = [
+  { label: 'Todas', value: null },
+  { label: 'Concordei', value: 'CONCORDO' },
+  { label: 'Discordei', value: 'DISCORDO' }
+]
+
 const pagina = ref(null)
 const paginaAtual = ref(0)
 const filtroVeredito = ref(null)
+const filtroAvaliacao = ref(null)
+const temFiltro = computed(() => !!(filtroVeredito.value || filtroAvaliacao.value))
 const selecionadoId = ref(null)
 const carregando = ref(false)
 const erro = ref('')
@@ -158,7 +194,8 @@ async function carregar() {
     const { data } = await listarHistorico({
       pagina: paginaAtual.value,
       tamanho: TAMANHO_PAGINA,
-      veredito: filtroVeredito.value
+      veredito: filtroVeredito.value,
+      avaliacao: filtroAvaliacao.value
     })
     pagina.value = data
   } catch (e) {
@@ -172,6 +209,12 @@ function irParaPagina(numero) {
   paginaAtual.value = numero - 1
   selecionadoId.value = null
   carregar()
+}
+
+/** Substitui o item alterado (validação/anotação) sem recarregar a lista inteira. */
+function atualizarItem(atualizado) {
+  const i = pagina.value.itens.findIndex(item => item.id === atualizado.id)
+  if (i !== -1) pagina.value.itens[i] = atualizado
 }
 
 function alternar(id) {
@@ -194,7 +237,7 @@ function formatarData(iso) {
   })
 }
 
-watch(filtroVeredito, () => {
+watch([filtroVeredito, filtroAvaliacao], () => {
   paginaAtual.value = 0
   selecionadoId.value = null
   carregar()
@@ -308,6 +351,32 @@ onMounted(carregar)
   margin-top: 6px;
   font-size: 0.7rem;
   color: var(--color-paper-dim);
+}
+
+.item-selo {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 0 6px;
+  border-radius: 3px;
+  border: 1px solid;
+}
+
+.item-selo--concordo {
+  color: var(--color-true);
+  border-color: var(--color-true);
+  background: var(--color-true-soft);
+}
+
+.item-selo--discordo {
+  color: var(--color-false);
+  border-color: var(--color-false);
+  background: var(--color-false-soft);
+}
+
+.item-selo--notas {
+  color: var(--color-signal);
+  border-color: var(--color-ink-line);
 }
 
 .item-seta {

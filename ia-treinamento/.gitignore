@@ -1,0 +1,18 @@
+# Arquivos gerados pelos scripts. Exceções versionadas (repositório privado):
+#   base.jsonl      -> divisão treino/validação/teste do corpus (evita depender do download)
+#   anotacoes.jsonl -> justificativas geradas pela Groq (custam a cota diária; não dá para perder)
+#   resultados/*.jsonl e *.md -> avaliação do capítulo de Resultados (~5 h para regenerar)
+dados/*
+!dados/base.jsonl
+!dados/anotacoes.jsonl
+resultados/*
+!resultados/*.jsonl
+!resultados/*.md
+
+# Modelos (vários GB)
+*.gguf
+crivo-lora/
+outputs/
+
+__pycache__/
+.ipynb_checkpoints/

@@ -87,6 +87,21 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- Autenticação: Spring Security + tokens JWT (cadastro/login de usuários) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- Banco em memória para o perfil "h2" (desenvolvimento sem PostgreSQL) e para os testes -->
 		<dependency>
 			<groupId>com.h2database</groupId>

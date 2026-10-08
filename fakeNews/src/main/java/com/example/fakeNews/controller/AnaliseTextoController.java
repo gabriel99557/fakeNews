@@ -7,12 +7,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 //http://localhost:8080/swagger-ui/index.html#/An%C3%A1lise%20de%20Fake%20News/analisarConteudoLocal
+// CORS configurado globalmente em config/SecurityConfig (crivo.cors.origens)
 @RestController
 @RequestMapping("/api/analise")
-@CrossOrigin(origins = "*")
 @Tag(name = "Análise de Fake News", description = "Endpoints para verificação de desinformação com IA")
 public class AnaliseTextoController {
 
@@ -35,8 +37,9 @@ public class AnaliseTextoController {
         }
     )
     @PostMapping("/texto")
-    public AnaliseResponse analisarConteudo(@Valid @RequestBody AnaliseRequest request) {
-        return analiseTextoService.analisar(request.getConteudo());
+    public AnaliseResponse analisarConteudo(@Valid @RequestBody AnaliseRequest request,
+                                            @AuthenticationPrincipal Jwt jwt) {
+        return analiseTextoService.analisar(request.getConteudo(), usuarioId(jwt));
     }
 
     @Operation(
@@ -45,7 +48,13 @@ public class AnaliseTextoController {
                 "otimizado com LoRA, servido localmente via Ollama."
     )
     @PostMapping("/texto/local")
-    public AnaliseResponse analisarConteudoLocal(@Valid @RequestBody AnaliseRequest request) {
-        return analiseTextoService.analisarLocal(request.getConteudo());
+    public AnaliseResponse analisarConteudoLocal(@Valid @RequestBody AnaliseRequest request,
+                                                 @AuthenticationPrincipal Jwt jwt) {
+        return analiseTextoService.analisarLocal(request.getConteudo(), usuarioId(jwt));
+    }
+
+    /** A análise é pública: sem login (jwt nulo) ela não entra em nenhum histórico pessoal. */
+    private static Long usuarioId(Jwt jwt) {
+        return jwt != null ? Long.valueOf(jwt.getSubject()) : null;
     }
 }
