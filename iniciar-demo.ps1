@@ -56,10 +56,11 @@ try {
     Write-Warning "Não consegui carregar o modelo local no Ollama ($($_.Exception.Message)). A análise pela Groq continua funcionando."
 }
 
-# 4. Mantém o computador acordado enquanto este processo existir (não altera as configurações de energia)
+# 4. Mantém o computador e a tela acordados enquanto este processo existir (não altera as configurações
+#    de energia; não impede uma suspensão feita manualmente pelo botão ou pelo menu Iniciar)
 $acordado = @'
 Add-Type -Name Energia -Namespace Win32 -MemberDefinition '[DllImport("kernel32.dll")] public static extern uint SetThreadExecutionState(uint esFlags);'
-while ($true) { [Win32.Energia]::SetThreadExecutionState(0x80000001) | Out-Null; Start-Sleep -Seconds 60 }
+while ($true) { [Win32.Energia]::SetThreadExecutionState(0x80000003) | Out-Null; Start-Sleep -Seconds 60 }
 '@
 $codificado = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($acordado))
 $p = Start-Process powershell.exe -WindowStyle Hidden -PassThru -ArgumentList '-NoProfile', '-EncodedCommand', $codificado

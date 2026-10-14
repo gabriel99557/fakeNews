@@ -8,6 +8,19 @@ $logs = Join-Path $PSScriptRoot 'logs'
 New-Item -ItemType Directory -Force $logs | Out-Null
 $log = Join-Path $logs 'tunel.log'
 
+# Garante o processo que mantém o PC e a tela acordados (se o PC suspender, o túnel morre)
+$pidArquivo = Join-Path $logs 'acordado.pid'
+$vivo = (Test-Path $pidArquivo) -and (Get-Process -Id (Get-Content $pidArquivo) -ErrorAction SilentlyContinue)
+if (-not $vivo) {
+    $acordado = @'
+Add-Type -Name Energia -Namespace Win32 -MemberDefinition '[DllImport("kernel32.dll")] public static extern uint SetThreadExecutionState(uint esFlags);'
+while ($true) { [Win32.Energia]::SetThreadExecutionState(0x80000003) | Out-Null; Start-Sleep -Seconds 60 }
+'@
+    $codificado = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($acordado))
+    $p = Start-Process powershell.exe -WindowStyle Hidden -PassThru -ArgumentList '-NoProfile', '-EncodedCommand', $codificado
+    Set-Content $pidArquivo $p.Id
+}
+
 Get-Process cloudflared -ErrorAction SilentlyContinue | Stop-Process -Force -Confirm:$false
 Start-Sleep -Seconds 1
 Remove-Item $log -ErrorAction SilentlyContinue
