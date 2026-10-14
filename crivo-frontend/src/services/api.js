@@ -2,8 +2,12 @@ import axios from 'axios'
 import { Notify } from 'quasar'
 import { tokenAtual, encerrarSessao } from './auth.js'
 
+// Por padrão usa caminhos relativos: em desenvolvimento o Vite repassa /api ao backend
+// (ver vite.config.js). VITE_API_BASE_URL permite apontar para outro servidor.
+const BASE_ANALISE = import.meta.env.VITE_API_BASE_URL || '/api/analise'
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api/analise',
+  baseURL: BASE_ANALISE,
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json'
@@ -12,7 +16,7 @@ const api = axios.create({
 
 // Rotas de autenticação ficam em /api/auth (irmã de /api/analise)
 const apiAuth = axios.create({
-  baseURL: (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api/analise').replace(/\/analise\/?$/, '/auth'),
+  baseURL: BASE_ANALISE.replace(/\/analise\/?$/, '/auth'),
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json'
